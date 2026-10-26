@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Topo from '../components/Topo.astro';
+import { t, href } from '../i18n';
+const es = t('es').notFound;
+const en = t('en').notFound;
+---
+<BaseLayout lang="es" route="home" title="404" noindex noAlternate headerTone="dark">
+  <section class="nf" data-tone="dark">
+    <div class="map" aria-hidden="true"><Topo seed="sin-ruta" levels={18} peaks={2} summit={false} /></div>
+    <div class="container in">
+      <p class="code mono">404 · h(x, y) = ∅</p>
+      <h1>{es.title}</h1>
+      <p class="lead">{es.text}</p>
+      <p class="lead en" lang="en">{en.title} {en.text}</p>
+      <div class="acts">
+        <a class="btn" href={href('es', 'home')}>{es.cta}</a>
+        <a class="btn btn--ghost" href={href('en', 'home')} lang="en">{en.cta}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .nf { position: relative; min-height: 100svh; display: grid; align-items: center; background: var(--c-night); color: #EEF1F0; overflow: hidden; padding-block: 8rem 4rem; }
+  .map { position: absolute; right: -10%; top: 50%; width: min(760px, 90vw); transform: translateY(-50%); color: var(--c-glacier-light); opacity: 0.35; }
+  .in { position: relative; display: grid; gap: var(--space-5); max-width: 46rem; margin-left: 0; }
+  .code { color: var(--c-dawn); font-size: var(--text-sm); }
+  h1 { font-size: var(--text-3xl); }
+  .lead { color: #C9D3D6; }
+  .en { font-size: var(--text-base); color: #A9B6BD; }
+  .acts { display: flex; gap: var(--space-4); flex-wrap: wrap; }
+  .nf .btn { --btn-bg: #EEF1F0; --btn-fg: #0F1C26; }
+  .nf .btn--ghost { --btn-bg: transparent; --btn-fg: #EEF1F0; }
+</style>

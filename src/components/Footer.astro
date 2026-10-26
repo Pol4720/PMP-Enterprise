@@ -1,0 +1,83 @@
+---
+import Logo from './Logo.astro';
+import { site, isPending } from '../config/site.config';
+import { visibleProducts } from '../config/products.config';
+import { t, href, asset, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+const a = d.anchors;
+const year = new Date().getFullYear();
+---
+<footer class="site-footer" data-tone="dark">
+  <div class="topo" aria-hidden="true"></div>
+  <div class="container inner">
+    <div class="brandcol">
+      <Logo variant="horizontal" class="f-logo" />
+      <p class="tag">{d.tagline}</p>
+      {!isPending(site.contactEmail) ? (
+        <a class="mail" href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
+      ) : (
+        <span class="mail pending">{d.contact.pendingEmail}</span>
+      )}
+    </div>
+    <nav class="cols" aria-label="Pie de página">
+      <div>
+        <p class="h">{site.name}</p>
+        <ul>
+          <li><a href={href(lang, 'home', undefined, a.about)}>{d.nav.about}</a></li>
+          <li><a href={href(lang, 'home', undefined, a.approach)}>{d.nav.approach}</a></li>
+          <li><a href={href(lang, 'home', undefined, a.contact)}>{d.nav.contact}</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="h">{d.nav.services}</p>
+        <ul>
+          <li><a href={href(lang, 'home', undefined, a.services)}>{d.services.eyebrow}</a></li>
+        </ul>
+        <p class="h h2">{d.nav.products}</p>
+        <ul>
+          {visibleProducts.map((p) => <li><a href={href(lang, 'product', p.slug)}>{p.name}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="h">Legal</p>
+        <ul>
+          <li><a href={href(lang, 'privacy')}>{d.footer.privacy}</a></li>
+          <li><a href={href(lang, 'cookies')}>{d.footer.cookies}</a></li>
+          <li><a href={href('es', 'brand')}>{d.footer.brand}</a></li>
+          <li><a href={asset('sitemap.xml')}>{d.footer.sitemap}</a></li>
+          {site.social.map((s) => <li><a href={s.url} rel="me noopener" target="_blank">{s.label}</a></li>)}
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="container legal">
+    <p>© {year} {site.legalName}. {d.footer.rights}</p>
+    <a href="#contenido" class="top">{d.footer.backToTop} ↑</a>
+  </div>
+</footer>
+
+<style>
+  .site-footer { position: relative; background: var(--c-night); color: #E7ECEB; overflow: hidden; padding-top: clamp(4rem, 3rem + 5vw, 8rem); }
+  .topo { position: absolute; inset: 0; opacity: 0.16; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600' viewBox='0 0 600 600'%3E%3Cg fill='none' stroke='%237CC2C8' stroke-width='1'%3E%3Cpath d='M-20 520 C120 430 210 470 300 380 S470 240 640 300'/%3E%3Cpath d='M-20 480 C110 400 200 430 290 345 S460 200 640 260'/%3E%3Cpath d='M-20 440 C100 370 190 390 280 310 S450 160 640 220'/%3E%3Cpath d='M-20 400 C90 340 180 350 270 275 S440 120 640 180'/%3E%3Cpath d='M-20 360 C80 310 170 310 260 240 S430 80 640 140'/%3E%3Cpath d='M-20 320 C70 280 160 270 250 205 S420 40 640 100'/%3E%3Cpath d='M-20 280 C60 250 150 230 240 170 S410 0 640 60'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 900px; background-position: right -200px bottom -120px; background-repeat: no-repeat;
+    mask-image: linear-gradient(to left, #000 30%, transparent 85%); }
+  .inner { position: relative; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 2fr); gap: var(--space-8); padding-bottom: var(--space-8); }
+  .brandcol { display: grid; gap: var(--space-4); align-content: start; }
+  .brandcol :global(.f-logo) { width: 180px; color: #EEF1F0; }
+  .tag { font: 400 var(--text-xl)/1.2 var(--font-display); max-width: 18ch; color: #EEF1F0; }
+  .mail { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--c-glacier-light); }
+  .mail.pending { color: #A9B6BD; }
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .h { font: 500 var(--text-xs)/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-dawn); margin-bottom: var(--space-4); }
+  .h2 { margin-top: var(--space-6); }
+  ul { list-style: none; display: grid; gap: var(--space-3); }
+  .cols a { text-decoration: none; color: #C9D3D6; font-size: var(--text-sm); }
+  .cols a:hover { color: #fff; text-decoration: underline; }
+  .legal { position: relative; display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; padding-block: var(--space-5) calc(var(--space-5) + env(safe-area-inset-bottom, 0px)); border-top: 1px solid #26394A; font-size: var(--text-xs); color: #A9B6BD; }
+  .legal a { color: inherit; }
+  @media (max-width: 820px) { .inner { grid-template-columns: 1fr; } .cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>

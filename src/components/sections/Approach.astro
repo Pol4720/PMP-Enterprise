@@ -1,0 +1,77 @@
+---
+import { t, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const dict = t(lang);
+const d = dict.approach;
+---
+<section id={dict.anchors.approach} data-tone="dark" class="approach section" aria-labelledby="approach-title" data-approach>
+  <div class="container wrap">
+    <div class="side">
+      <div class="sticky">
+        <p class="eyebrow" data-reveal>{d.eyebrow}</p>
+        <h2 id="approach-title" data-reveal style="--reveal-delay:80ms">{d.title}</h2>
+        <p class="lead" data-reveal style="--reveal-delay:160ms">{d.lead}</p>
+        <p class="counter mono" aria-hidden="true"><span data-step-now>01</span> / {String(d.steps.length).padStart(2, '0')}</p>
+      </div>
+    </div>
+    <ol class="steps">
+      <span class="rail" aria-hidden="true"><i data-rail></i></span>
+      {d.steps.map((s, i) => (
+        <li class="step" data-step={i}>
+          <span class="node" aria-hidden="true"></span>
+          <p class="num mono">{String(i + 1).padStart(2, '0')}</p>
+          <h3>{s.title}</h3>
+          <p class="text">{s.text}</p>
+          <p class="out"><span class="mono">{lang === 'es' ? 'Entregable' : 'Deliverable'}</span>{s.output}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .approach { background: var(--c-night); color: #E7ECEB; --muted: #A9B6BD; --accent: var(--c-glacier-light); border-top: 1px solid #26394A; }
+  .approach .lead { color: #A9B6BD; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-9); }
+  .sticky { position: sticky; top: 7rem; display: grid; gap: var(--space-5); }
+  .sticky h2 { font-size: var(--text-3xl); }
+  .counter { font-size: var(--text-2xl); color: #3e5566; margin-top: var(--space-5); }
+  .counter span { color: var(--c-dawn); }
+  .steps { list-style: none; position: relative; display: grid; gap: clamp(3rem, 2rem + 4vw, 6rem); padding-left: 3rem; padding-block: 1rem 2rem; }
+  .rail { position: absolute; left: 6px; top: 0; bottom: 0; width: 1px; background: #26394A; }
+  .rail i { position: absolute; inset: 0 0 auto; height: 100%; background: linear-gradient(var(--c-glacier-light), var(--c-dawn)); transform-origin: top; transform: scaleY(var(--fill, 1)); }
+  .step { position: relative; display: grid; gap: var(--space-3); opacity: 1; transition: opacity 0.6s var(--ease-out); }
+  :global(.js-motion) .step:not(.is-on) { opacity: 0.38; }
+  .node { position: absolute; left: calc(-3rem + 1px); top: 0.45rem; width: 11px; height: 11px; border: 1px solid #3e5566; background: var(--c-night); transform: rotate(45deg); transition: background 0.5s, border-color 0.5s; }
+  .step.is-on .node { background: var(--c-dawn); border-color: var(--c-dawn); box-shadow: 0 0 18px rgba(217,164,65,0.5); }
+  .num { font-size: var(--text-xs); color: var(--c-dawn); letter-spacing: 0.14em; }
+  .step h3 { font-size: var(--text-2xl); color: #fff; }
+  .text { color: #C9D3D6; max-width: 46ch; }
+  .out { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: baseline; margin-top: var(--space-2); padding: 0.9rem 1rem; border: 1px solid #26394A; font-size: var(--text-sm); color: #E7ECEB; max-width: 46ch; }
+  .out .mono { font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-glacier-light); }
+  @media (max-width: 900px) {
+    .wrap { grid-template-columns: 1fr; gap: var(--space-7); }
+    .sticky { position: static; }
+    .counter { display: none; }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger } from '../../lib/smooth';
+  const root = document.querySelector<HTMLElement>('[data-approach]');
+  if (root && document.documentElement.classList.contains('js-motion')) {
+    const rail = root.querySelector<HTMLElement>('[data-rail]')!;
+    const now = root.querySelector<HTMLElement>('[data-step-now]')!;
+    const steps = [...root.querySelectorAll<HTMLElement>('[data-step]')];
+    rail.style.setProperty('--fill', '0');
+    gsap.to(rail, { '--fill': 1, ease: 'none', scrollTrigger: { trigger: root.querySelector('.steps'), start: 'top 60%', end: 'bottom 60%', scrub: true } });
+    steps.forEach((el, i) => {
+      ScrollTrigger.create({
+        trigger: el, start: 'top 62%', end: 'bottom 62%',
+        onToggle: (st) => { if (st.isActive) { steps.forEach((s, j) => s.classList.toggle('is-on', j <= i)); now.textContent = String(i + 1).padStart(2, '0'); } },
+        onLeaveBack: () => { if (i === 0) steps.forEach((s) => s.classList.remove('is-on')); },
+      });
+    });
+  }
+</script>

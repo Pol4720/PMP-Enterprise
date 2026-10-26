@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Story from '../components/Story.astro';
+import About from '../components/sections/About.astro';
+import Services from '../components/sections/Services.astro';
+import Products from '../components/sections/Products.astro';
+import Approach from '../components/sections/Approach.astro';
+import Contact from '../components/sections/Contact.astro';
+import { services } from '../config/services.config';
+import { site } from '../config/site.config';
+import type { Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const servicesLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: lang === 'es' ? 'Servicios de datos e IA' : 'Data and AI services',
+  itemListElement: services.map((s, i) => ({
+    '@type': 'ListItem', position: i + 1,
+    item: { '@type': 'Service', name: s[lang].title, description: s[lang].summary, provider: { '@type': 'Organization', name: site.name } },
+  })),
+};
+---
+<BaseLayout lang={lang} route="home" headerTone="dark" jsonLd={[servicesLd]}>
+  <Story lang={lang} />
+  <About lang={lang} />
+  <Services lang={lang} />
+  <Products lang={lang} />
+  <Approach lang={lang} />
+  <Contact lang={lang} />
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import type { ProductStatus } from '../config/products.config';
+import { t, type Lang } from '../i18n';
+interface Props { status: ProductStatus; lang: Lang }
+const { status, lang } = Astro.props;
+---
+<span class:list={['pill', `pill--${status}`]}><i aria-hidden="true"></i>{t(lang).products.status[status]}</span>
+
+<style>
+  .pill { display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.45rem 0.75rem; border: 1px solid var(--line); font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg); background: var(--bg); }
+  .pill i { width: 7px; height: 7px; transform: rotate(45deg); flex: none; }
+  .pill--available i { background: #3FA36B; box-shadow: 0 0 0 3px color-mix(in srgb, #3FA36B 25%, transparent); }
+  .pill--soon i { background: var(--c-dawn); animation: pill-pulse 2.4s ease-in-out infinite; }
+  .pill--collab i { background: transparent; border: 1.5px solid var(--accent); }
+  @keyframes pill-pulse { 50% { opacity: 0.35; } }
+</style>

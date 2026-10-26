@@ -1,0 +1,80 @@
+---
+import Topo from '../Topo.astro';
+import { t, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang).about;
+const id = t(lang).anchors.about;
+---
+<section id={id} class="about section" aria-labelledby="about-title">
+  <div class="dawn-edge" aria-hidden="true"></div>
+  <div class="container grid">
+    <div class="head">
+      <p class="eyebrow" data-reveal>{d.eyebrow}</p>
+      <h2 id="about-title" data-reveal style="--reveal-delay:80ms">{d.title}</h2>
+      <p class="lead" data-reveal style="--reveal-delay:160ms">{d.lead}</p>
+    </div>
+    <div class="map" aria-hidden="true" data-reveal style="--reveal-delay:120ms">
+      <Topo seed="apice-about" levels={16} peaks={4} class="about-topo" />
+      <span class="coord mono">h(x, y) · 16 {lang === 'es' ? 'curvas de nivel' : 'contour lines'}</span>
+    </div>
+  </div>
+
+  <div class="container"><div class="mv">
+    <article class="mv-card" data-reveal>
+      <p class="mv-label mono">{d.missionLabel}</p>
+      <p class="mv-text">{d.mission}</p>
+    </article>
+    <article class="mv-card" data-reveal style="--reveal-delay:120ms">
+      <p class="mv-label mono">{d.visionLabel}</p>
+      <p class="mv-text">{d.vision}</p>
+    </article>
+  </div></div>
+
+  <div class="container values">
+    <p class="values-label eyebrow" data-reveal>{d.valuesLabel}</p>
+    <ul>
+      {d.values.map((v, i) => (
+        <li data-reveal style={`--reveal-delay:${i * 90}ms`}>
+          <span class="v-mark" aria-hidden="true"></span>
+          <h3>{v.title}</h3>
+          <p>{v.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about { background: var(--bg); overflow: hidden; }
+  .dawn-edge { position: absolute; inset: 0 0 auto; height: 220px; pointer-events: none; background: linear-gradient(180deg, color-mix(in srgb, var(--c-dawn) 16%, transparent), transparent); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--space-8); align-items: center; }
+  .head { display: grid; gap: var(--space-5); }
+  .head h2 { font-size: var(--text-3xl); }
+  .map { position: relative; color: var(--accent); }
+  .map :global(.about-topo) { width: 100%; max-width: 440px; margin-left: auto; }
+  .map :global(.about-topo path) { stroke-dasharray: 1200; stroke-dashoffset: 1200; }
+  :global(.no-js) .map :global(.about-topo path), :global(html:not(.js-motion)) .map :global(.about-topo path) { stroke-dashoffset: 0; }
+  .map.is-in :global(.about-topo path) { animation: topo-draw 3.2s var(--ease-out) forwards; animation-delay: calc(var(--l) * 70ms); }
+  @keyframes topo-draw { to { stroke-dashoffset: 0; } }
+  .coord { position: absolute; right: 0; bottom: -0.5rem; font-size: var(--text-xs); color: var(--muted); }
+
+  .mv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); margin-top: clamp(4rem, 3rem + 4vw, 7rem); }
+  .mv-card { background: var(--surface); padding: clamp(1.75rem, 1.2rem + 2vw, 3rem); display: grid; gap: var(--space-4); align-content: start; }
+  .mv-label { font-size: var(--text-xs); letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-text); }
+  .mv-text { font: 380 var(--text-xl)/1.3 var(--font-display); }
+
+  .values { margin-top: clamp(4rem, 3rem + 4vw, 7rem); display: grid; gap: var(--space-6); }
+  .values ul { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); }
+  .values li { display: grid; gap: var(--space-3); align-content: start; padding-top: var(--space-5); border-top: 1px solid var(--fg); }
+  .v-mark { width: 9px; height: 9px; background: var(--c-dawn); transform: rotate(45deg); }
+  .values h3 { font-size: var(--text-xl); }
+  .values p { color: var(--muted); font-size: var(--text-sm); }
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; }
+    .map :global(.about-topo) { max-width: 320px; margin: 0 auto; }
+    .mv { grid-template-columns: 1fr; }
+    .values ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 520px) { .values ul { grid-template-columns: 1fr; } }
+</style>

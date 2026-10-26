@@ -1,0 +1,113 @@
+---
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/instrument-sans';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/global.css';
+import { tokensToCss } from '../design/tokens';
+import { site, isPending } from '../config/site.config';
+import { visibleProducts } from '../config/products.config';
+import { t, href, asset, type Lang, type RouteKey } from '../i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  lang: Lang;
+  route: RouteKey;
+  slug?: string;
+  title?: string;
+  description?: string;
+  /** Ruta de la imagen OG dentro de /og (sin extensión). */
+  og?: string;
+  /** Datos estructurados adicionales. */
+  jsonLd?: Record<string, unknown>[];
+  /** Ocultar alternativa de idioma (páginas solo en español). */
+  noAlternate?: boolean;
+  headerTone?: 'dark' | 'light';
+  noindex?: boolean;
+}
+const { lang, route, slug, title, description, og = lang === 'es' ? 'home-es' : 'home-en', jsonLd = [], noAlternate = false, headerTone = 'light', noindex = false } = Astro.props;
+const d = t(lang);
+const pageTitle = title ? `${title} · ${site.name}` : d.meta.title;
+const pageDesc = description ?? d.meta.description;
+const siteUrl = (Astro.site?.href ?? '').replace(/\/$/, '');
+const canonical = siteUrl + href(lang, route, slug);
+const alt = { es: siteUrl + href('es', route, slug), en: siteUrl + href('en', route, slug) };
+const ogImage = siteUrl + asset(`og/${og}.png`);
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': siteUrl + href('es', 'home') + '#organization',
+  name: site.name,
+  legalName: site.legalName,
+  url: siteUrl + href('es', 'home'),
+  logo: siteUrl + asset('brand/apice-isotipo-app.png'),
+  slogan: d.tagline,
+  foundingDate: String(site.foundingYear),
+  description: d.meta.description,
+  knowsAbout: ['Data science', 'Statistics', 'Machine learning', 'Artificial intelligence', 'Software engineering'],
+  ...(isPending(site.contactEmail) ? {} : { email: site.contactEmail }),
+  ...(site.social.length ? { sameAs: site.social.map((s) => s.url) } : {}),
+  owns: visibleProducts.map((p) => ({ '@type': 'SoftwareApplication', name: p.name, applicationCategory: p[lang].sector, url: siteUrl + href(lang, 'product', p.slug) })),
+};
+const websiteLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: site.name, url: siteUrl + href(lang, 'home'), inLanguage: lang };
+const analytics = !isPending(site.goatcounterCode);
+---
+<!doctype html>
+<html lang={d.meta.htmlLang} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noAlternate && <link rel="alternate" hreflang="es" href={alt.es} />}
+    {!noAlternate && <link rel="alternate" hreflang="en" href={alt.en} />}
+    {!noAlternate && <link rel="alternate" hreflang="x-default" href={alt.es} />}
+    <meta name="theme-color" content={site.themeColor} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={asset('favicon-32.png')} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />
+    <link rel="manifest" href={asset('site.webmanifest')} />
+    <link rel="sitemap" href={asset('sitemap.xml')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={d.meta.ogLocale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <style is:inline set:html={tokensToCss()}></style>
+    <script is:inline>
+      document.documentElement.classList.replace('no-js', 'js');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('js-motion');
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify([orgLd, websiteLd, ...jsonLd])} />
+    {analytics && <script is:inline data-goatcounter={`https://${site.goatcounterCode}.goatcounter.com/count`} async src={asset('vendor/goatcounter-count.v4.js')}></script>}
+    <slot name="head" />
+  </head>
+  <body data-header-tone={headerTone}>
+    <a class="skip-link" href="#contenido">{d.nav.skip}</a>
+    <Header lang={lang} route={route} slug={slug} noAlternate={noAlternate} />
+    <main id="contenido" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <script>
+      import { initReveal } from '../lib/reveal';
+      initReveal();
+    </script>
+  </body>
+</html>

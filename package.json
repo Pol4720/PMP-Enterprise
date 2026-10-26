@@ -1,0 +1,38 @@
+{
+  "name": "apice-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Sitio corporativo y sistema de marca de Ápice.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "brand:build": "node scripts/brand/build-logos.mjs",
+    "brand:render": "node scripts/brand/render-assets.mjs",
+    "story:stills": "node scripts/story-stills.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource-variable/instrument-sans": "5.2.8",
+    "@fontsource-variable/newsreader": "5.2.8",
+    "@fontsource/jetbrains-mono": "5.2.8",
+    "@resvg/resvg-js": "2.6.2",
+    "astro": "5.18.2",
+    "gsap": "3.13.0",
+    "lenis": "1.3.11",
+    "satori": "0.18.3",
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.4",
+    "@fontsource/instrument-sans": "5.2.8",
+    "@fontsource/newsreader": "5.2.8",
+    "@types/three": "0.180.0",
+    "opentype.js": "1.3.4",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,152 @@
+---
+import Icon from '../Icon.astro';
+import { site, isPending } from '../../config/site.config';
+import { t, href, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const dict = t(lang);
+const d = dict.contact;
+const f = d.form;
+const emailReady = !isPending(site.contactEmail);
+const formReady = !isPending(site.formspreeId);
+---
+<section id={dict.anchors.contact} class="contact section" aria-labelledby="contact-title">
+  <div class="container grid">
+    <div class="intro">
+      <p class="eyebrow" data-reveal>{d.eyebrow}</p>
+      <h2 id="contact-title" data-reveal style="--reveal-delay:80ms">{d.title}</h2>
+      <p class="lead" data-reveal style="--reveal-delay:160ms">{d.lead}</p>
+      <div class="mailbox" data-reveal style="--reveal-delay:220ms">
+        <p class="mono label">{d.emailLabel}</p>
+        {emailReady ? (
+          <div class="mailrow">
+            <a class="mail" href={`mailto:${site.contactEmail}`}><Icon name="mail" size={22} />{site.contactEmail}</a>
+            <button class="copy" type="button" data-copy={site.contactEmail} data-copied={d.copied}><Icon name="copy" size={18} /><span>{d.copy}</span></button>
+          </div>
+        ) : (
+          <p class="mail pending" data-pending="contactEmail"><Icon name="mail" size={22} />{d.pendingEmail}</p>
+        )}
+      </div>
+    </div>
+
+    <form class="form" data-form data-ready={formReady ? 'true' : 'false'} action={formReady ? `https://formspree.io/f/${site.formspreeId}` : undefined} method="post" novalidate data-reveal style="--reveal-delay:120ms"
+      data-msg-required={f.required} data-msg-email={f.invalidEmail} data-msg-sending={f.sending} data-msg-success={f.success} data-msg-error={f.error}>
+      <div class="field">
+        <label for="c-name">{f.name}</label>
+        <input id="c-name" name="name" type="text" autocomplete="name" required maxlength="120" />
+        <p class="err" id="c-name-err" aria-live="polite"></p>
+      </div>
+      <div class="field">
+        <label for="c-email">{f.email}</label>
+        <input id="c-email" name="email" type="email" autocomplete="email" required maxlength="160" />
+        <p class="err" id="c-email-err" aria-live="polite"></p>
+      </div>
+      <div class="field">
+        <label for="c-company">{f.company}</label>
+        <input id="c-company" name="company" type="text" autocomplete="organization" maxlength="160" />
+      </div>
+      <div class="field">
+        <label for="c-message">{f.message}</label>
+        <textarea id="c-message" name="message" rows="5" required maxlength="4000"></textarea>
+        <p class="err" id="c-message-err" aria-live="polite"></p>
+      </div>
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+      <input type="hidden" name="_language" value={lang} />
+      <div class="field check">
+        <input id="c-consent" name="consent" type="checkbox" required />
+        <label for="c-consent">{f.consent.split(lang === 'es' ? 'política de privacidad' : 'privacy policy')[0]}<a href={href(lang, 'privacy')}>{lang === 'es' ? 'política de privacidad' : 'privacy policy'}</a>{f.consent.split(lang === 'es' ? 'política de privacidad' : 'privacy policy')[1]}</label>
+        <p class="err" id="c-consent-err" aria-live="polite"></p>
+      </div>
+      <div class="submit-row">
+        <button class="btn" type="submit" disabled={!formReady}>{f.submit}<span class="arrow" aria-hidden="true">→</span></button>
+        <p class="status" role="status" data-status>{!formReady && f.pending}</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .contact { background: var(--bg); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: var(--space-9); align-items: start; }
+  .intro { display: grid; gap: var(--space-5); }
+  .intro h2 { font-size: var(--text-3xl); }
+  .mailbox { margin-top: var(--space-5); padding-top: var(--space-5); border-top: 1px solid var(--line); display: grid; gap: var(--space-3); }
+  .label { font-size: var(--text-xs); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .mailrow { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+  .mail { display: inline-flex; gap: 0.75rem; align-items: center; font: 400 var(--text-xl)/1.2 var(--font-display); text-decoration: none; color: var(--fg); overflow-wrap: anywhere; }
+  .mail:hover { color: var(--accent); }
+  .mail.pending { font-size: var(--text-base); color: var(--muted); font-family: var(--font-mono); }
+  .copy { display: inline-flex; gap: 0.4rem; align-items: center; background: none; border: 1px solid var(--line); padding: 0.45rem 0.7rem; font-size: var(--text-xs); cursor: pointer; color: var(--muted); }
+  .copy:hover { color: var(--fg); border-color: var(--fg); }
+
+  .form { display: grid; gap: var(--space-5); padding: clamp(1.5rem, 1rem + 2vw, 2.75rem); background: var(--surface); border: 1px solid var(--line); }
+  .field { display: grid; gap: 0.5rem; }
+  .field label { font-size: var(--text-sm); font-weight: 500; }
+  .field input:not([type='checkbox']), .field textarea {
+    width: 100%; padding: 0.85rem 0.95rem; border: 1px solid var(--line); background: var(--bg); color: var(--fg);
+    border-radius: 0; transition: border-color var(--dur-base), box-shadow var(--dur-base);
+  }
+  .field textarea { resize: vertical; min-height: 8rem; }
+  .field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+  .field [aria-invalid='true'] { border-color: #B3261E; }
+  .err { font-size: var(--text-xs); color: #B3261E; min-height: 1em; }
+  @media (prefers-color-scheme: dark) { .err { color: #F2938C; } .field [aria-invalid='true'] { border-color: #F2938C; } }
+  .check { grid-template-columns: auto 1fr; align-items: start; column-gap: 0.75rem; }
+  .check input { width: 18px; height: 18px; margin-top: 0.2rem; accent-color: var(--c-glacier); }
+  .check label { font-weight: 400; color: var(--muted); }
+  .check .err { grid-column: 2; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+  .submit-row { display: flex; flex-wrap: wrap; gap: var(--space-4); align-items: center; }
+  .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+  .status { font-size: var(--text-sm); color: var(--muted); flex: 1 1 14rem; }
+  .status.ok { color: var(--accent); }
+  .status.bad { color: #B3261E; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; gap: var(--space-7); } }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-form]');
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      const span = b.querySelector('span')!; const prev = span.textContent;
+      try { await navigator.clipboard.writeText(b.dataset.copy!); span.textContent = b.dataset.copied!; setTimeout(() => (span.textContent = prev), 1800); } catch { /* el correo sigue visible para copiarlo a mano */ }
+    });
+  });
+  if (form && form.dataset.ready === 'true') {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const btn = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+    const msg = (k: string) => form.dataset[k] ?? '';
+    const setErr = (el: HTMLInputElement | HTMLTextAreaElement, text: string) => {
+      const e = form.querySelector<HTMLElement>(`#${el.id}-err`);
+      if (e) e.textContent = text;
+      el.setAttribute('aria-invalid', text ? 'true' : 'false');
+      if (text) el.setAttribute('aria-describedby', `${el.id}-err`); else el.removeAttribute('aria-describedby');
+    };
+    const validate = () => {
+      let first: HTMLElement | null = null;
+      form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[required]').forEach((el) => {
+        let text = '';
+        if (el instanceof HTMLInputElement && el.type === 'checkbox') text = el.checked ? '' : msg('msgRequired');
+        else if (!el.value.trim()) text = msg('msgRequired');
+        else if (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(el.value.trim())) text = msg('msgEmail');
+        setErr(el, text);
+        if (text && !first) first = el;
+      });
+      if (first) (first as HTMLElement).focus();
+      return !first;
+    };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.className = 'status';
+      if (!validate()) return;
+      btn.disabled = true; status.textContent = msg('msgSending');
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset(); status.textContent = msg('msgSuccess'); status.classList.add('ok');
+      } catch {
+        status.textContent = msg('msgError'); status.classList.add('bad');
+      } finally { btn.disabled = false; }
+    });
+  }
+</script>

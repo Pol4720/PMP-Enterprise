@@ -1,0 +1,64 @@
+---
+import Icon from '../Icon.astro';
+import Topo from '../Topo.astro';
+import { services } from '../../config/services.config';
+import { t, href, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const dict = t(lang);
+const d = dict.services;
+---
+<section id={dict.anchors.services} data-tone="dark" class="services section" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>{d.eyebrow}</p>
+      <h2 id="services-title" data-reveal style="--reveal-delay:80ms">{d.title}</h2>
+      <p class="lead" data-reveal style="--reveal-delay:160ms">{d.lead}</p>
+    </div>
+    <ul class="cards">
+      {services.map((s, i) => (
+        <li class="card" data-reveal style={`--reveal-delay:${(i % 3) * 90}ms`}>
+          <Topo seed={s.id} levels={12} peaks={2} class="card-topo" summit={false} />
+          <div class="card-top">
+            <span class="ico"><Icon name={s.icon} size={28} /></span>
+            <span class="idx mono">{String(i + 1).padStart(2, '0')}</span>
+          </div>
+          <h3>{s[lang].title}</h3>
+          <p class="summary">{s[lang].summary}</p>
+          <div class="uses">
+            <p class="uses-label mono">{d.useCasesLabel}</p>
+            <ul>{s[lang].useCases.map((u) => <li>{u}</li>)}</ul>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <div class="cta-row" data-reveal>
+      <a class="btn" href={href(lang, 'home', undefined, dict.anchors.contact)}>{d.cta}<span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services { background: var(--c-night); color: #E7ECEB; --accent: var(--c-glacier-light); --muted: #A9B6BD; --line: #26394A; --fg: #E7ECEB; --bg: var(--c-night); }
+  .services .lead { color: #A9B6BD; }
+  .cards { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: #26394A; border: 1px solid #26394A; }
+  .card { position: relative; overflow: hidden; background: #0F1C26; padding: clamp(1.5rem, 1rem + 1.5vw, 2.5rem); display: grid; gap: var(--space-4); align-content: start; transition: background var(--dur-slow) var(--ease-out); isolation: isolate; }
+  .card :global(.card-topo) { position: absolute; right: -30%; bottom: -35%; width: 95%; color: var(--c-glacier-light); opacity: 0; z-index: -1; transform: scale(0.94) rotate(-4deg); transition: opacity var(--dur-slow) var(--ease-out), transform 1.6s var(--ease-out); }
+  .card:hover { background: #12232f; }
+  .card:hover :global(.card-topo) { opacity: 0.35; transform: none; }
+  .card-top { display: flex; justify-content: space-between; align-items: center; }
+  .ico { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid #26394A; color: var(--c-glacier-light); transition: border-color var(--dur-base), color var(--dur-base); }
+  .card:hover .ico { border-color: var(--c-dawn); color: var(--c-dawn); }
+  .idx { font-size: var(--text-xs); color: #6f8591; }
+  .card h3 { font-size: var(--text-xl); margin-top: var(--space-3); color: #fff; }
+  .summary { color: #C9D3D6; font-size: var(--text-sm); }
+  .uses { margin-top: var(--space-3); padding-top: var(--space-4); border-top: 1px solid #26394A; display: grid; gap: var(--space-3); }
+  .uses-label { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-dawn); }
+  .uses ul { list-style: none; display: grid; gap: var(--space-2); }
+  .uses li { position: relative; padding-left: 1.1rem; font-size: var(--text-sm); color: #E7ECEB; }
+  .uses li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 5px; height: 5px; border: 1px solid var(--c-glacier-light); transform: rotate(45deg); }
+  .cta-row { margin-top: var(--space-7); display: flex; justify-content: flex-end; }
+  .services .btn { --btn-bg: #EEF1F0; --btn-fg: #0F1C26; }
+  @media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .cards { grid-template-columns: 1fr; } .cta-row { justify-content: stretch; } .cta-row .btn { width: 100%; } }
+</style>

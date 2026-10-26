@@ -1,0 +1,23 @@
+---
+/**
+ * Iconos de Ápice: retícula de 24 px, trazo 1,5 px, terminaciones rectas.
+ * Siempre acompañados de texto; por eso son decorativos (aria-hidden).
+ */
+interface Props { name: keyof typeof icons; size?: number; class?: string }
+const icons = {
+  advisory: '<circle cx="11" cy="11" r="6.5"/><path d="M15.8 15.8L21 21"/><path d="M8 12.5l2-2 1.6 1.6L14.5 9"/>',
+  statistics: '<path d="M3 20.5h18"/><path d="M5 17.5c2.2 0 3-11 7-11s4.8 11 7 11"/><path d="M12 6.5v14" stroke-dasharray="1.5 2"/>',
+  ml: '<circle cx="5" cy="6" r="1.8"/><circle cx="5" cy="18" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="M6.6 6.9l3.8 4.2M6.6 17.1l3.8-4.2M13.6 11.1l3.8-4.2M13.6 12.9l3.8 4.2"/>',
+  ai: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/>',
+  analytics: '<path d="M3.5 3.5v17h17"/><path d="M7.5 15.5l3.5-4 3 2.5 5-6"/><path d="M16 8h3v3"/>',
+  custom: '<path d="M8.5 7L3.5 12l5 5"/><path d="M15.5 7l5 5-5 5"/><path d="M13.5 4.5l-3 15"/>',
+  arrow: '<path d="M4 12h15"/><path d="M13.5 6.5L19 12l-5.5 5.5"/>',
+  external: '<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v6H4V6h6"/>',
+  mail: '<rect x="3" y="5.5" width="18" height="13"/><path d="M3.5 6l8.5 7 8.5-7"/>',
+  copy: '<rect x="8.5" y="8.5" width="12" height="12"/><path d="M15.5 8.5v-5h-12v12h5"/>',
+  check: '<path d="M4.5 12.5l5 5 10-11"/>',
+  shield: '<path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.3-7.5 9.5-4.3-1.2-7.5-4.9-7.5-9.5V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+} as const;
+const { name, size = 24, class: cls = '' } = Astro.props;
+---
+<svg class:list={['icon', cls]} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true" focusable="false" set:html={icons[name]} />

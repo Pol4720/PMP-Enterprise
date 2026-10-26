@@ -1,0 +1,49 @@
+---
+import ProductCard from '../ProductCard.astro';
+import Topo from '../Topo.astro';
+import { visibleProducts } from '../../config/products.config';
+import { t, type Lang } from '../../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const dict = t(lang);
+const d = dict.products;
+---
+<section id={dict.anchors.products} class="products section" aria-labelledby="products-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" data-reveal>{d.eyebrow}</p>
+      <h2 id="products-title" data-reveal style="--reveal-delay:80ms">{d.title}</h2>
+      <p class="lead" data-reveal style="--reveal-delay:160ms">{d.lead}</p>
+    </div>
+    <div class="legend" data-reveal aria-hidden="true">
+      {(['available', 'soon', 'collab'] as const).map((s) => <span class:list={['lg', `lg--${s}`]}><i></i>{d.status[s]}</span>)}
+    </div>
+    <div class="list">
+      {visibleProducts.map((p, i) => <ProductCard product={p} lang={lang} index={i} />)}
+      <article class="upcoming" data-reveal>
+        <div class="up-map" aria-hidden="true"><Topo seed="proximas-cumbres" levels={10} peaks={4} summit={false} class="up-topo" /></div>
+        <div class="up-body">
+          <h3>{d.upcomingTitle}</h3>
+          <p>{d.upcomingText}</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .products { background: var(--bg); }
+  .legend { display: flex; flex-wrap: wrap; gap: var(--space-5); margin: calc(var(--space-7) * -0.5) 0 var(--space-6); font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .lg { display: inline-flex; gap: 0.5rem; align-items: center; }
+  .lg i { width: 7px; height: 7px; transform: rotate(45deg); }
+  .lg--available i { background: #3FA36B; }
+  .lg--soon i { background: var(--c-dawn); }
+  .lg--collab i { border: 1.5px solid var(--accent); }
+  .list { display: grid; gap: var(--space-5); }
+  .upcoming { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--space-6); align-items: center; padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); border: 1px dashed var(--line); }
+  .up-map { width: 120px; color: var(--muted); opacity: 0.6; }
+  .up-body { display: grid; gap: var(--space-3); }
+  .up-body h3 { font-size: var(--text-xl); }
+  .up-body p { color: var(--muted); max-width: 60ch; }
+  @media (max-width: 600px) { .upcoming { grid-template-columns: 1fr; } .up-map { width: 90px; } }
+</style>

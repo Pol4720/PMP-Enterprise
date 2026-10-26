@@ -1,0 +1,20 @@
+---
+/** Emblema topográfico animable. El color sale de currentColor; la cima, de --topo-summit. */
+import { topoPaths, type TopoOptions } from '../lib/topo';
+interface Props extends TopoOptions { seed: string; class?: string; summit?: boolean }
+const { seed, class: cls = '', summit = true, ...opts } = Astro.props;
+const { paths, summit: s, levels } = topoPaths(seed, opts);
+const size = opts.size ?? 200;
+---
+<svg class:list={['topo', cls]} viewBox={`0 0 ${size} ${size}`} aria-hidden="true" focusable="false">
+  {paths.map((p) => (
+    <path d={p.d} style={`--l:${p.level};--o:${(0.25 + 0.75 * (p.level / levels)).toFixed(2)}`} fill="none" stroke="currentColor" stroke-width={p.level % 5 === 0 ? 1.3 : 0.8} vector-effect="non-scaling-stroke" />
+  ))}
+  {summit && <rect class="topo-summit" x={s.x - 4} y={s.y - 4} width="8" height="8" transform={`rotate(45 ${s.x} ${s.y})`} />}
+</svg>
+
+<style is:global>
+  .topo { overflow: visible; }
+  .topo path { opacity: var(--o); }
+  .topo-summit { fill: var(--topo-summit, var(--c-dawn)); }
+</style>

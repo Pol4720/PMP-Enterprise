@@ -1,0 +1,215 @@
+---
+/**
+ * «El ascenso»: la historia de Ápice contada con scroll.
+ * - Con movimiento permitido y WebGL: escena 3D (src/scene/StoryScene.ts) fijada mientras se hace scroll.
+ * - Con prefers-reduced-motion, sin JS o sin WebGL: láminas estáticas con el mismo texto.
+ */
+import { t, href, asset, type Lang } from '../i18n';
+import { visibleProducts } from '../config/products.config';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = t(lang);
+const s = d.story;
+const a = d.anchors;
+const products = visibleProducts.map((p) => ({ name: p.name, accent: p.accent, status: p.status, statusLabel: d.products.status[p.status] }));
+const fill = (v: string) => v.replace('{products}', String(products.length)).replace(/\{\w+\}/g, '—');
+---
+<section class="story" data-tone="dark" data-story aria-label={s.heroTitle.join(' ')} data-products={JSON.stringify(products)} data-soon={s.soonPeak} data-lang={lang}>
+  <div class="stage" data-stage>
+    <canvas class="gl" data-canvas aria-hidden="true"></canvas>
+    <div class="veil" aria-hidden="true"></div>
+    <div class="labels" data-labels aria-hidden="true"></div>
+
+    <div class="hero container" data-hero>
+      <p class="eyebrow">{s.heroEyebrow}</p>
+      <h1 class="hero-title">
+        {s.heroTitle.map((line, i) => <span class="line" style={`--d:${i * 140 + 200}ms`}><span>{line}</span></span>)}
+      </h1>
+      <p class="hero-lead">{s.heroLead}</p>
+      <div class="hero-actions">
+        <a class="btn" href={href(lang, 'home', undefined, a.contact)}>{s.outroCta}<span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href={href(lang, 'home', undefined, a.services)}>{s.outroSecondary}</a>
+      </div>
+    </div>
+
+    <div class="hint" data-hint aria-hidden="true">
+      <span class="mono">{s.scrollHint}</span>
+      <span class="hint-line"><i></i></span>
+    </div>
+
+    <ol class="chapters container" data-chapters>
+      {s.chapters.map((c, i) => (
+        <li class="chapter" data-chapter={c.id}>
+          <p class="ch-kicker"><span class="mono">{String(i + 1).padStart(2, '0')} / {String(s.chapters.length).padStart(2, '0')}</span>{c.kicker}</p>
+          <h2 class="ch-title">{c.title}</h2>
+          <p class="ch-body">{c.body}</p>
+          <dl class="ch-stats">
+            {c.stats.map((st) => (
+              <div><dt>{st.label}</dt><dd class="mono tabular" data-fill={st.value}>{fill(st.value)}</dd></div>
+            ))}
+          </dl>
+        </li>
+      ))}
+    </ol>
+
+    <aside class="altimeter" data-alt aria-hidden="true">
+      <span class="alt-top mono" data-alt-top>2 410 m</span>
+      <div class="alt-rail"><i data-alt-fill></i><b data-alt-mark><span class="mono" data-alt-val>0 m</span></b></div>
+      <span class="alt-base mono">0 m</span>
+      <ol class="alt-steps">
+        {s.chapters.map((c) => <li data-alt-step={c.id}>{c.kicker}</li>)}
+      </ol>
+    </aside>
+
+    <div class="outro" data-outro>
+      <p class="eyebrow outro-eyebrow">Ápice</p>
+      <p class="outro-title">{s.outroTitle}</p>
+      <div class="hero-actions center">
+        <a class="btn" href={href(lang, 'home', undefined, a.contact)}>{s.outroCta}<span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href={href(lang, 'home', undefined, a.services)}>{s.outroSecondary}</a>
+      </div>
+    </div>
+
+    <div class="loader" data-loader aria-hidden="true"><span class="mono">{s.loading}</span><i></i></div>
+    <a class="skip-story" href={href(lang, 'home', undefined, a.about)}>{s.skip} ↓</a>
+  </div>
+
+  <!-- Alternativa estática: movimiento reducido, sin JavaScript o sin WebGL -->
+  <div class="static" data-static>
+    <div class="container static-hero">
+      <p class="eyebrow">{s.heroEyebrow}</p>
+      <h1 class="hero-title">{s.heroTitle.map((l) => <span class="line"><span>{l}</span></span>)}</h1>
+      <p class="hero-lead">{s.heroLead}</p>
+    </div>
+    <ol class="container plates">
+      {s.chapters.map((c, i) => (
+        <li class="plate">
+          <figure>
+            <img src={asset(`story/${c.id}.webp`)} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+          </figure>
+          <div class="plate-text">
+            <p class="ch-kicker"><span class="mono">{String(i + 1).padStart(2, '0')}</span>{c.kicker}</p>
+            <h2 class="ch-title">{c.title}</h2>
+            <p class="ch-body">{c.body}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .story { position: relative; background: #08121A; color: #EEF1F0; --story-h: 1050vh; }
+  .stage { display: none; }
+  .static { display: block; padding-block: 9rem 6rem; background: radial-gradient(120% 70% at 50% 0%, #12293a 0%, #08121A 60%); }
+  :global(.js-motion) .story.is-3d .stage { display: block; position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  :global(.js-motion) .story.is-3d { height: var(--story-h); }
+  :global(.js-motion) .story.is-3d .static { display: none; }
+
+  .gl { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1.4s var(--ease-out); }
+  .story.is-ready .gl { opacity: 1; }
+  .veil { position: absolute; inset: 0; pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(8,18,26,0.82) 0%, rgba(8,18,26,0.5) 32%, rgba(8,18,26,0) 56%),
+      linear-gradient(0deg, rgba(8,18,26,0.55) 0%, rgba(8,18,26,0) 30%);
+  }
+
+  /* Portada */
+  .hero { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: var(--space-5); padding-top: 4rem; will-change: opacity, transform; }
+  .hero .eyebrow { color: var(--c-glacier-light); }
+  .hero-title { font-size: var(--text-4xl); line-height: 0.98; letter-spacing: -0.025em; font-weight: 350; display: grid; }
+  .hero-title .line { display: block; overflow: hidden; padding-bottom: 0.08em; }
+  .hero-title .line:nth-child(2) { font-style: italic; color: #f3dca8; }
+  .hero-title .line > span { display: inline-block; }
+  :global(.js-motion) .story .stage .hero-title .line > span { transform: translateY(110%); animation: rise 1.3s var(--ease-out) forwards; animation-delay: var(--d); }
+  @keyframes rise { to { transform: none; } }
+  .hero-lead { max-width: 44ch; font-size: var(--text-lg); color: #C9D3D6; }
+  .hero-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-3); }
+  .hero-actions.center { justify-content: center; }
+  .story .btn { --btn-bg: #EEF1F0; --btn-fg: #0F1C26; }
+  .story .btn--ghost { --btn-bg: transparent; --btn-fg: #EEF1F0; }
+
+  .hint { position: absolute; left: 50%; bottom: calc(1.6rem + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: grid; justify-items: center; gap: 0.8rem; font-size: var(--text-xs); letter-spacing: 0.14em; text-transform: uppercase; color: #A9B6BD; }
+  .hint-line { width: 1px; height: 54px; background: rgba(238,241,240,0.18); overflow: hidden; }
+  .hint-line i { display: block; width: 100%; height: 40%; background: var(--c-dawn); animation: hint 2.2s var(--ease-in-out) infinite; }
+  @keyframes hint { 0% { transform: translateY(-100%); } 100% { transform: translateY(260%); } }
+
+  /* Capítulos */
+  .chapters { position: absolute; inset: 0; list-style: none; pointer-events: none; }
+  .chapter { position: absolute; left: max(var(--gutter), env(safe-area-inset-left, 0px)); top: 50%; width: min(31rem, 40vw); display: grid; gap: var(--space-4); opacity: 0; visibility: hidden; will-change: opacity, transform; }
+  .ch-kicker { display: flex; align-items: center; gap: 0.9rem; font: 500 var(--text-xs)/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-glacier-light); }
+  .ch-kicker .mono { color: var(--c-dawn); }
+  .ch-title { font-size: var(--text-2xl); font-weight: 380; line-height: 1.04; text-shadow: 0 2px 30px rgba(8,18,26,0.7); }
+  .chapter { text-shadow: 0 1px 18px rgba(8,18,26,0.85); }
+  .ch-body { color: #C9D3D6; font-size: var(--text-base); max-width: 42ch; }
+  .ch-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-5); margin: var(--space-3) 0 0; padding-top: var(--space-4); border-top: 1px solid rgba(238,241,240,0.16); }
+  .ch-stats div { display: flex; flex-direction: column-reverse; gap: 0.35rem; }
+  .ch-stats dt { font-size: var(--text-xs); color: #A9B6BD; }
+  .ch-stats dd { margin: 0; font-size: var(--text-xl); color: #EEF1F0; }
+
+  /* Altímetro */
+  .altimeter { position: absolute; right: max(var(--gutter), env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); display: grid; grid-template-columns: auto auto; grid-template-rows: auto 1fr auto; column-gap: 1.1rem; height: min(56vh, 460px); opacity: 0; transition: opacity 0.8s var(--ease-out); }
+  .story.show-alt .altimeter { opacity: 1; }
+  .alt-top, .alt-base { grid-column: 1; font-size: 0.68rem; color: #A9B6BD; text-align: right; }
+  .alt-rail { grid-column: 1; position: relative; width: 1px; justify-self: end; margin: 0.6rem 0; background: repeating-linear-gradient(to top, rgba(238,241,240,0.35) 0 1px, transparent 1px 10%); }
+  .alt-rail::before { content: ""; position: absolute; inset: 0; background: rgba(238,241,240,0.14); }
+  .alt-rail i { position: absolute; left: 0; bottom: 0; width: 1px; height: 0; background: var(--c-dawn); box-shadow: 0 0 10px var(--c-dawn); }
+  .alt-rail b { position: absolute; left: 50%; bottom: 0; width: 9px; height: 9px; background: var(--c-dawn); transform: translate(-50%, 50%) rotate(45deg); }
+  .alt-rail b span { position: absolute; right: 16px; top: 50%; transform: translateY(-50%) rotate(-45deg); white-space: nowrap; font-size: 0.72rem; color: #EEF1F0; transform-origin: right center; }
+  .alt-steps { grid-column: 2; grid-row: 1 / 4; list-style: none; display: flex; flex-direction: column-reverse; justify-content: space-between; font: 400 0.7rem/1.2 var(--font-mono); color: rgba(238,241,240,0.38); letter-spacing: 0.06em; }
+  .alt-steps li { transition: color 0.5s; }
+  .alt-steps li.is-on { color: #EEF1F0; }
+
+  /* Etiquetas 3D */
+  .labels { position: absolute; inset: 0; pointer-events: none; }
+  .labels :global(.lbl) { position: absolute; left: 0; top: 0; opacity: 0; will-change: transform; }
+  .labels :global(.lbl > span) { display: inline-flex; align-items: center; gap: 0.5rem; transform: translate(-50%, -100%); white-space: nowrap; padding: 0.35rem 0.6rem; font: 500 0.7rem/1 var(--font-mono); letter-spacing: 0.06em; color: #EEF1F0; background: rgba(8,18,26,0.62); border: 1px solid rgba(238,241,240,0.18); backdrop-filter: blur(6px); }
+  .labels :global(.lbl i) { width: 7px; height: 7px; transform: rotate(45deg); background: var(--dot, var(--c-dawn)); flex: none; }
+  .labels :global(.lbl small) { color: #A9B6BD; font-size: 0.64rem; }
+  .labels :global(.lbl--apex > span) { font-size: 0.78rem; border-color: rgba(217,164,65,0.6); }
+  .labels :global(.lbl--readout > span) { transform: translate(14px, -50%); background: transparent; border: 0; border-left: 1px solid var(--c-dawn); color: #f3dca8; }
+
+  /* Cierre */
+  .outro::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 45% at 50% 52%, rgba(8,18,26,0.62), rgba(8,18,26,0) 75%); }
+  .outro { position: absolute; inset: 0; isolation: isolate; display: grid; place-content: center; justify-items: center; gap: var(--space-5); text-align: center; padding-inline: var(--gutter); opacity: 0; visibility: hidden; }
+  .outro-eyebrow { color: #f3dca8; }
+  .outro-title { font: 380 var(--text-3xl)/1.02 var(--font-display); max-width: 16ch; letter-spacing: -0.02em; color: #fff; text-shadow: 0 2px 40px rgba(8,18,26,0.6); }
+
+  .loader { position: absolute; left: 50%; bottom: 7.5rem; transform: translateX(-50%); display: grid; gap: 0.6rem; justify-items: center; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: #A9B6BD; transition: opacity 0.6s; }
+  .loader i { width: 120px; height: 1px; background: linear-gradient(90deg, transparent, var(--c-dawn), transparent); background-size: 200% 100%; animation: load 1.2s linear infinite; }
+  @keyframes load { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+  .story.is-ready .loader { opacity: 0; pointer-events: none; }
+  .skip-story { position: absolute; right: max(var(--gutter), env(safe-area-inset-right, 0px)); bottom: calc(1.4rem + env(safe-area-inset-bottom, 0px)); font: 500 0.7rem/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: #A9B6BD; text-decoration: none; padding: 0.6rem 0; }
+  .skip-story:hover, .skip-story:focus-visible { color: #fff; }
+
+  /* Estático */
+  .static-hero { display: grid; gap: var(--space-5); padding-bottom: var(--space-9); }
+  .plates { list-style: none; display: grid; gap: clamp(4rem, 3rem + 4vw, 8rem); }
+  .plate { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-7); align-items: center; }
+  .plate:nth-child(even) figure { order: 2; }
+  .plate figure { margin: 0; border: 1px solid rgba(238,241,240,0.12); background: #050c11; aspect-ratio: 16 / 10; overflow: hidden; }
+  .plate img { width: 100%; height: 100%; object-fit: cover; }
+  .plate-text { display: grid; gap: var(--space-4); }
+
+  @media (max-width: 860px) {
+    .story { --story-h: 980vh; }
+    .veil { background: linear-gradient(0deg, rgba(8,18,26,0.92) 0%, rgba(8,18,26,0.6) 34%, rgba(8,18,26,0) 58%), linear-gradient(180deg, rgba(8,18,26,0.5) 0%, rgba(8,18,26,0) 20%); }
+    .hero { justify-content: flex-end; padding-bottom: 7.5rem; }
+    .chapter { top: auto; bottom: calc(4.2rem + env(safe-area-inset-bottom, 0px)); left: max(var(--gutter), env(safe-area-inset-left, 0px)); right: max(var(--gutter), env(safe-area-inset-right, 0px)); width: auto; gap: var(--space-3); }
+    .ch-body { font-size: var(--text-sm); }
+    .ch-stats { gap: var(--space-4); padding-top: var(--space-3); }
+    .ch-stats dd { font-size: var(--text-lg); }
+    .altimeter { top: calc(5rem + env(safe-area-inset-top, 0px)); transform: none; height: 30vh; }
+    .alt-steps { display: none; }
+    .plate { grid-template-columns: 1fr; gap: var(--space-5); }
+    .plate:nth-child(even) figure { order: 0; }
+    .skip-story { display: none; }
+    .labels :global(.lbl > span) { font-size: 0.62rem; }
+  }
+</style>
+
+<script>
+  import { initStory } from '../lib/story';
+  initStory();
+</script>
