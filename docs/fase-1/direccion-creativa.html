@@ -1,0 +1,457 @@
+<title>Ápice · Dirección creativa</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300..600&family=Instrument+Sans:wght@400..600&family=JetBrains+Mono:wght@400;500&family=Archivo:wdth,wght@62..125,300..700&family=IBM+Plex+Mono:wght@400&family=Source+Serif+4:opsz,wght@8..60,400..600&family=Source+Sans+3:wght@400..600&family=Source+Code+Pro:wght@400&display=swap">
+<style>
+/* Layout: columna editorial estrecha con láminas técnicas a ancho completo; anotaciones en mono como en un cuaderno de campo. */
+:root{
+  --bg:#EEF1F0;         /* Niebla */
+  --surface:#F8FAF9;
+  --line:#CDD4D3;       /* Roca */
+  --fg:#0F1C26;         /* Noche alpina */
+  --muted:#3B4B57;      /* Pizarra */
+  --accent:#25707A;     /* Glaciar */
+  --apex:#D9A441;       /* Alba */
+  --contour:#25707A;
+  --display:"Newsreader", "Iowan Old Style", Georgia, serif;
+  --sans:"Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1C26;--surface:#142632;--line:#2A3B47;--fg:#E7ECEB;--muted:#A9B6BD;--accent:#7CC2C8;--apex:#D9A441;--contour:#7CC2C8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1C26;--surface:#142632;--line:#2A3B47;--fg:#E7ECEB;--muted:#A9B6BD;--accent:#7CC2C8;--apex:#D9A441;--contour:#7CC2C8;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 17px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0}
+.col{max-width:68ch}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.1}
+h1{font-size:clamp(2.6rem,6vw,4.6rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.8rem,3.4vw,2.6rem)}
+h3{font-size:1.35rem;font-weight:500}
+p{margin:0}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.note{font:400 .8rem/1.5 var(--mono);color:var(--muted)}
+.lead{font-size:1.2rem;color:var(--muted);max-width:60ch}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+header.top{padding-block:28px;border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.mark{font-family:var(--display);font-size:1.6rem;display:flex;align-items:baseline;gap:.15em}
+.mark i{display:inline-block;width:.32em;height:.32em;background:var(--apex);transform:rotate(45deg) translateY(-.1em)}
+
+.hero{padding-block:72px 40px;display:grid;gap:24px}
+section{padding-block:64px;border-top:1px solid var(--line)}
+.sec-head{display:grid;gap:12px;margin-bottom:36px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px}
+.panel{background:var(--surface);border:1px solid var(--line);padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.stack{display:grid;gap:14px}
+
+/* Posicionamiento */
+.statement{font-family:var(--display);font-size:clamp(1.35rem,2.4vw,1.75rem);line-height:1.35;max-width:34ch}
+.slogans{display:grid;gap:0;border-top:1px solid var(--line)}
+.slogan{display:grid;grid-template-columns:3.2rem 1fr;gap:16px;padding-block:18px;border-bottom:1px solid var(--line);align-items:baseline}
+.slogan .es{font-family:var(--display);font-size:1.45rem}
+.slogan .en{color:var(--muted);font-size:.95rem}
+.tag{display:inline-block;font:500 .7rem/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px;border:1px solid var(--accent);color:var(--accent);margin-left:8px;vertical-align:middle}
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:0;border:1px solid var(--line)}
+.pillar{padding:20px;border-right:1px solid var(--line);display:grid;gap:8px}
+.pillar:last-child{border-right:0}
+@media (max-width:700px){.pillar{border-right:0;border-bottom:1px solid var(--line)}.pillar:last-child{border-bottom:0}}
+
+/* Arquitectura */
+.arch{display:grid;gap:18px;justify-items:center;padding:28px 16px;background:var(--surface);border:1px solid var(--line)}
+.arch .mother{font-family:var(--display);font-size:2rem;display:flex;gap:.15em;align-items:baseline}
+.arch .mother i{display:inline-block;width:.28em;height:.28em;background:var(--apex);transform:rotate(45deg)}
+.arch .rail{width:min(100%,640px);height:1px;background:var(--line)}
+.arch .kids{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.kid{border:1px solid var(--line);padding:12px 16px;display:grid;gap:4px;min-width:170px;background:var(--bg)}
+.kid b{font-weight:600}
+.kid span{font:400 .72rem/1.3 var(--mono);color:var(--muted)}
+
+/* Tono */
+.dodont{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line)}
+.dodont>div{padding:16px 18px;border-bottom:1px solid var(--line);min-width:0}
+.dodont>div:nth-child(odd){border-right:1px solid var(--line)}
+.dodont .h{font:500 .72rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.dodont .yes{font-family:var(--display);font-size:1.1rem}
+.dodont .no{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line)}
+@media (max-width:600px){.dodont{grid-template-columns:1fr}.dodont>div:nth-child(odd){border-right:0}}
+
+/* Moodboard */
+.mood{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:0;border-top:1px solid var(--line)}
+.mood>div{padding:18px 18px 18px 0;border-bottom:1px solid var(--line);display:grid;gap:6px}
+.mood .k{font:500 .72rem/1 var(--mono);color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+
+/* Conceptos */
+.concept{display:grid;gap:20px}
+.concept>*,.demo>*{min-width:0}
+.concept-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px}
+.rec{background:var(--apex);color:#0F1C26;font:600 .7rem/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:7px 10px}
+.demo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:0;border:1px solid var(--line);background:var(--surface)}
+@media (max-width:800px){.demo{grid-template-columns:1fr}}
+.demo-text{padding:24px;display:grid;gap:14px;align-content:start;border-right:1px solid var(--line);min-width:0}
+@media (max-width:800px){.demo-text{border-right:0;border-bottom:1px solid var(--line);order:2}}
+.phase-num{font:500 .75rem/1 var(--mono);color:var(--accent);letter-spacing:.1em}
+.phase-title{font-family:var(--display);font-size:1.7rem}
+.phase-body{color:var(--muted);min-height:6.5em}
+.phase-data{font:400 .8rem/1.6 var(--mono);color:var(--fg);border-top:1px solid var(--line);padding-top:12px}
+.demo-canvas{position:relative;aspect-ratio:3/2;max-width:100%}
+.demo-canvas canvas{width:100%;height:100%;display:block}
+.controls{display:flex;align-items:center;gap:12px;padding:14px 24px;border-top:1px solid var(--line);grid-column:1/-1}
+.controls input[type=range]{flex:1;accent-color:var(--accent);min-width:0}
+.btn{font:500 .8rem/1 var(--mono);background:transparent;color:var(--fg);border:1px solid var(--fg);padding:10px 14px;cursor:pointer}
+.btn:hover{background:var(--fg);color:var(--bg)}
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border-top:1px solid var(--line);grid-column:1/-1}
+.steps button{font:400 .72rem/1.3 var(--mono);color:var(--muted);background:none;border:0;border-right:1px solid var(--line);padding:12px 4px;cursor:pointer;text-align:center;min-width:0;overflow-wrap:anywhere}
+@media (max-width:520px){.steps button{font-size:.62rem}}
+.steps button:last-child{border-right:0}
+.steps button[aria-current="true"]{color:var(--fg);box-shadow:inset 0 2px 0 var(--accent)}
+.alt{display:grid;gap:12px}
+.alt ol{margin:0;padding-left:1.2em;display:grid;gap:6px;color:var(--muted)}
+.verdict{font:400 .85rem/1.5 var(--mono);color:var(--muted);border-left:2px solid var(--line);padding-left:12px}
+
+/* Paletas */
+.palette{display:grid;gap:14px}
+.palette-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px}
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:0;border:1px solid var(--line)}
+.sw{display:grid;grid-template-rows:96px auto;min-width:0;border-right:1px solid var(--line)}
+.sw:last-child{border-right:0}
+.sw .chip{display:flex;align-items:flex-end;padding:10px;font:500 1.1rem/1 var(--display)}
+.sw .meta{padding:10px;font:400 .7rem/1.6 var(--mono);color:var(--muted);background:var(--surface);overflow-wrap:anywhere}
+.sw .meta b{color:var(--fg);font-weight:500;font-family:var(--sans);font-size:.85rem}
+.preview{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}
+@media (max-width:640px){.preview{grid-template-columns:1fr}}
+.preview>div{padding:22px;display:grid;gap:8px}
+.preview .t{font-family:var(--display);font-size:1.5rem;line-height:1.15}
+.preview .cta{justify-self:start;font:500 .8rem/1 var(--sans);padding:10px 14px}
+
+/* Tipografía */
+.type{display:grid;gap:0;border-top:1px solid var(--line)}
+.type-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:24px;padding-block:28px;border-bottom:1px solid var(--line)}
+@media (max-width:760px){.type-row{grid-template-columns:1fr}}
+.spec-d{font-size:clamp(2rem,4.2vw,3rem);line-height:1.05}
+.spec-b{font-size:1.02rem;color:var(--muted);max-width:52ch}
+.spec-m{font-size:.8rem;color:var(--accent)}
+
+/* Preguntas */
+.ask{counter-reset:q;display:grid;gap:0;border-top:1px solid var(--line)}
+.ask li{list-style:none;display:grid;grid-template-columns:2.4rem 1fr;gap:12px;padding-block:16px;border-bottom:1px solid var(--line)}
+.ask li::before{counter-increment:q;content:counter(q,decimal-leading-zero);font:500 .8rem/1.8 var(--mono);color:var(--accent)}
+.ask{padding:0;margin:0}
+footer{padding-block:40px;border-top:1px solid var(--line)}
+.num{font-variant-numeric:tabular-nums}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="mark">Ápice<i aria-hidden="true"></i></div>
+    <div class="note">Fase 1 · Estrategia y dirección creativa · Para aprobación</div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Documento de dirección creativa</p>
+    <h1>Una cordillera que crece, una cima que se alcanza con método.</h1>
+    <p class="lead">En esta fase defino qué dice la marca, cómo suena y cómo se ve, y te propongo tres maneras de contar la historia con el scroll. Al final hay cinco decisiones para ti. Cada una trae mi recomendación.</p>
+  </div>
+</div>
+
+<!-- 1. Posicionamiento -->
+<section aria-labelledby="s1"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Posicionamiento</p><h2 id="s1">Qué es Ápice y por qué elegirla</h2></div>
+  <div class="grid2">
+    <div class="stack">
+      <p class="statement">Ápice es un estudio de software y ciencia de datos que trata cada producto y cada modelo como un experimento serio: con hipótesis, validación y resultados que se pueden comprobar.</p>
+      <p class="note">Declaración interna de posicionamiento. Guía las decisiones; no se publica tal cual.</p>
+    </div>
+    <div class="panel">
+      <p class="eyebrow">Propuesta de valor</p>
+      <h3>Convertimos datos y problemas complejos en software y decisiones confiables, con el rigor de la ciencia de la computación.</h3>
+      <p class="note">Para quién: empresas que necesitan entender sus datos; instituciones científicas y de salud que buscan un socio tecnológico; personas que usan los productos.</p>
+    </div>
+  </div>
+
+  <div class="pillars" style="margin-top:32px">
+    <div class="pillar"><p class="eyebrow">Rigor</p><p>Método científico en todo: medimos, validamos y documentamos. Nada se entrega sin pruebas.</p></div>
+    <div class="pillar"><p class="eyebrow">Confianza</p><p>Seguridad y privacidad desde el diseño. Explicamos qué hace cada modelo y con qué certeza.</p></div>
+    <div class="pillar"><p class="eyebrow">Elegancia</p><p>Soluciones simples para problemas difíciles. Lo complejo se queda en la ingeniería, no en la experiencia.</p></div>
+    <div class="pillar"><p class="eyebrow">Altura</p><p>Estándares altos en código, diseño y trato. Lo dice el nombre.</p></div>
+  </div>
+
+  <div class="stack" style="margin-top:40px">
+    <p class="eyebrow">Eslogan · tres candidatos</p>
+    <div class="slogans">
+      <div class="slogan"><span class="note">A</span><div><p class="es">Rigor científico. Software de altura.<span class="tag">Recomendado</span></p><p class="en">Scientific rigor. Software at its peak.</p></div></div>
+      <div class="slogan"><span class="note">B</span><div><p class="es">Del dato a la decisión.</p><p class="en">From data to decision.</p></div></div>
+      <div class="slogan"><span class="note">C</span><div><p class="es">Llevamos tus datos a la cima.</p><p class="en">Taking your data to the summit.</p></div></div>
+    </div>
+    <p class="note">Recomiendo la A porque nombra los dos valores centrales (rigor y calidad superior) y conecta con el nombre sin forzarlo. La B es clara pero la usan muchas empresas de datos. La C suena más comercial.</p>
+  </div>
+</div></section>
+
+<!-- 2. Arquitectura -->
+<section aria-labelledby="s2"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Arquitectura de marca</p><h2 id="s2">Marca madre que respalda, productos con nombre propio</h2>
+    <p class="lead">Modelo de <b>marca respaldada</b>. Cada producto conserva su nombre y su color de acento porque sirve a sectores muy distintos (logística, salud, auditoría). Todos comparten tipografía, retícula y la firma «por Ápice», que les presta confianza.</p></div>
+  <div class="arch" role="img" aria-label="Diagrama: Ápice como marca madre, con dos ramas: productos y servicios.">
+    <div class="mother">Ápice<i></i></div>
+    <div class="rail"></div>
+    <div class="kids">
+      <div class="kid"><b>Ápice Servicios</b><span>Datos · estadística · IA a medida</span></div>
+      <div class="kid"><b>Muévelo</b><span>por Ápice · logística</span></div>
+      <div class="kid"><b>AuditSoft</b><span>por Ápice · en colaboración</span></div>
+      <div class="kid"><b>Gestión de Ensayos Clínicos</b><span>por Ápice · en colaboración</span></div>
+      <div class="kid"><b>Próximos productos</b><span>una entrada en la configuración</span></div>
+    </div>
+  </div>
+  <p class="note" style="margin-top:14px">Por qué no una marca única (todo «Ápice X»): Muévelo ya tiene nombre e identidad propios, y la gente de logística no tiene por qué conocer Ápice. Por qué no marcas totalmente independientes: perderían la confianza que aporta una casa con rigor científico.</p>
+</div></section>
+
+<!-- 3. Tono -->
+<section aria-labelledby="s3"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Tono de voz</p><h2 id="s3">Preciso, sereno, cercano</h2>
+    <p class="lead">Hablamos como una científica que explica su trabajo a alguien inteligente que no es del área: con datos concretos, sin exagerar, sin jerga innecesaria. En inglés seguimos el mismo tono; no traducimos palabra por palabra.</p></div>
+  <div class="dodont">
+    <div class="h">Decimos</div><div class="h">Evitamos</div>
+    <div class="yes">Reducimos el tiempo de revisión documental de días a horas.</div><div class="no">Revolucionamos la auditoría con IA disruptiva.</div>
+    <div class="yes">Validamos cada modelo con datos que no vio durante el entrenamiento.</div><div class="no">Nuestra IA de última generación nunca se equivoca.</div>
+    <div class="yes">Te decimos qué podemos resolver y qué no.</div><div class="no">¡Soluciones 360° para todas tus necesidades!</div>
+    <div class="yes">Análisis estadístico, modelos predictivos, aprendizaje automático.</div><div class="no">Sinergias data-driven de next level.</div>
+  </div>
+</div></section>
+
+<!-- 4. Moodboard -->
+<section aria-labelledby="s4"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Moodboard descrito</p><h2 id="s4">El mundo visual: cartografía de alta montaña y láminas científicas</h2>
+    <p class="lead">La idea central: <b>los datos son un terreno</b>. Las curvas de nivel de un mapa topográfico son una visualización de datos real y además son bellas. Una cima es el punto más alto de una función: exactamente lo que busca un algoritmo de optimización. Nombre, ciencia y estética cuentan la misma historia.</p></div>
+  <div class="mood">
+    <div><p class="k">Líneas</p><p>Curvas de nivel finas, retículas de levantamiento topográfico, cotas y coordenadas anotadas.</p></div>
+    <div><p class="k">Luz</p><p>Amanecer en alta montaña: aire frío y limpio, y un único punto cálido en la cumbre.</p></div>
+    <div><p class="k">Materiales</p><p>Papel de mapa, roca, niebla glaciar. Superficies mates y nada de brillos.</p></div>
+    <div><p class="k">Composición</p><p>Láminas de atlas científico: mucho aire, alineación estricta, notas al margen en tipografía monoespaciada.</p></div>
+    <div><p class="k">Ilustración</p><p>Original, hecha en código: terrenos, trayectorias y nodos. Trazo de 1,5 px con un solo color de acento.</p></div>
+    <div><p class="k">Fotografía</p><p>Casi ninguna. Si aparece, texturas de roca, nieve o niebla, viradas a la paleta. Nunca gente posando frente a un portátil.</p></div>
+    <div><p class="k">Iconos</p><p>Lineales, retícula de 24 px, trazo de 1,5 px, terminaciones rectas. Pocos y siempre con texto.</p></div>
+    <div><p class="k">Movimiento</p><p>Lento y seguro: curvas suaves, nada de rebotes. Como un ascenso, no como una explosión.</p></div>
+  </div>
+  <p class="note" style="margin-top:14px">Qué evitamos a propósito: degradados morados, cerebros brillantes, robots, redes de nodos neón, fotos de stock y fondos negros con un único color fluorescente.</p>
+</div></section>
+
+<!-- 5. Conceptos -->
+<section aria-labelledby="s5"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Scrollytelling · tres conceptos</p><h2 id="s5">Cómo contar la historia con el scroll</h2>
+    <p class="lead">En la web, cada fase avanza al hacer scroll. Aquí puedes probar el concepto recomendado con el deslizador o los botones de fase. Es un boceto de la mecánica, no el diseño final.</p></div>
+
+  <div class="concept">
+    <div class="concept-head"><h3 style="font-size:1.8rem">A · El ascenso</h3><span class="rec">Recomendado</span></div>
+    <div class="demo">
+      <div class="demo-text" aria-live="polite">
+        <p class="phase-num" id="pnum">FASE 01 / 05</p>
+        <p class="phase-title" id="ptitle">Ruido</p>
+        <p class="phase-body" id="pbody"></p>
+        <p class="phase-data" id="pdata"></p>
+      </div>
+      <div class="demo-canvas"><canvas id="terrain" role="img" aria-label="Animación: puntos dispersos que se ordenan en un terreno con curvas de nivel; una trayectoria asciende hasta la cima y aparecen los productos como otras cumbres."></canvas></div>
+      <div class="steps" role="group" aria-label="Fases">
+        <button type="button" data-t="0">01 Ruido</button><button type="button" data-t="1">02 Estructura</button><button type="button" data-t="2">03 Modelo</button><button type="button" data-t="3">04 Ascenso</button><button type="button" data-t="4">05 Cima</button>
+      </div>
+      <div class="controls">
+        <button class="btn" id="play" type="button">Reproducir</button>
+        <label for="t" class="note">Scroll simulado</label>
+        <input id="t" type="range" min="0" max="4" step="0.01" value="0">
+      </div>
+    </div>
+    <div class="grid3">
+      <div class="panel"><p class="eyebrow">Escritorio</p><p>Ilustración fija a la derecha y textos que entran por la izquierda, sincronizados con cada fase. Cifras y anotaciones aparecen junto al terreno.</p></div>
+      <div class="panel"><p class="eyebrow">Móvil</p><p>Pensado en vertical: el terreno ocupa la mitad superior y las fichas de texto suben por debajo. El ascenso se lee de abajo arriba, como el gesto del pulgar.</p></div>
+      <div class="panel"><p class="eyebrow">Movimiento reducido</p><p>Si el visitante lo pide en su sistema, se muestran cinco láminas estáticas, una por fase, con el mismo texto. Ningún contenido se pierde.</p></div>
+    </div>
+    <p class="verdict">Por qué lo recomiendo: es la única historia que solo puede contar Ápice. Une el nombre (la cima), la ciencia (subir por el gradiente es literalmente cómo se optimiza un modelo) y el negocio (cada producto es otra cumbre de la cordillera; un producto nuevo es un pico nuevo, sin rediseñar nada). Técnicamente es ligero: líneas sobre canvas 2D, sin 3D pesado, con 60 fps en equipos medios.</p>
+  </div>
+
+  <div class="grid2" style="margin-top:48px">
+    <div class="alt panel">
+      <h3>B · El laboratorio</h3>
+      <p>Una muestra de datos recorre un instrumento de laboratorio, al estilo de la cafetera viral:</p>
+      <ol><li>Entra por un embudo (ingesta).</li><li>Pasa por filtros (limpieza).</li><li>Un prisma la descompone en un espectro (análisis).</li><li>Una red de engranajes la transforma (modelo).</li><li>Sale como pantalla de una aplicación (producto).</li></ol>
+      <p class="verdict">Es muy literal y fácil de entender, pero exige mucha ilustración compleja y corre el riesgo de parecer una infografía. Conecta poco con el nombre.</p>
+    </div>
+    <div class="alt panel">
+      <h3>C · Constelación</h3>
+      <p>Puntos sueltos en un cielo nocturno:</p>
+      <ol><li>Se conectan por afinidad (datos que se relacionan).</li><li>Forman figuras (patrones, modelos).</li><li>Cada figura es un producto.</li><li>Las colaboraciones son líneas entre constelaciones.</li><li>Al final aparece el mapa estelar completo.</li></ol>
+      <p class="verdict">Es poético y fácil de ampliar, pero las redes de nodos son el recurso visual más repetido del sector tecnológico. Sería lo contrario de diferenciarse.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- 6. Paletas -->
+<section aria-labelledby="s6"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Color · tres candidatas</p><h2 id="s6">Paletas</h2>
+    <p class="lead">Las tres usan fondos de baja saturación, cómodos para leer durante mucho tiempo, y un solo acento. «Contraste» es la diferencia de luminosidad con el fondo claro. La norma WCAG AA exige al menos 4,5 para texto normal y 3 para texto grande o gráficos.</p></div>
+
+  <div class="stack" style="gap:48px">
+    <div class="palette">
+      <div class="palette-head"><h3>A · Altitud</h3><span class="rec">Recomendada</span></div>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#0F1C26;color:#EEF1F0">Noche alpina</div><div class="meta"><b>#0F1C26</b><br>RGB 15 28 38<br>HSL 206° 43% 10%<br>Contraste 15,2</div></div>
+        <div class="sw"><div class="chip" style="background:#3B4B57;color:#EEF1F0">Pizarra</div><div class="meta"><b>#3B4B57</b><br>RGB 59 75 87<br>HSL 206° 19% 29%<br>Contraste 7,9</div></div>
+        <div class="sw"><div class="chip" style="background:#EEF1F0;color:#0F1C26">Niebla</div><div class="meta"><b>#EEF1F0</b><br>RGB 238 241 240<br>HSL 160° 10% 94%<br>Fondo</div></div>
+        <div class="sw"><div class="chip" style="background:#CDD4D3;color:#0F1C26">Roca</div><div class="meta"><b>#CDD4D3</b><br>RGB 205 212 211<br>HSL 171° 8% 82%<br>Líneas y bordes</div></div>
+        <div class="sw"><div class="chip" style="background:#25707A;color:#EEF1F0">Glaciar</div><div class="meta"><b>#25707A</b><br>RGB 37 112 122<br>HSL 187° 53% 31%<br>Contraste 5,0 · sobre oscuro: claro #7CC2C8 (8,6)</div></div>
+        <div class="sw"><div class="chip" style="background:#D9A441;color:#0F1C26">Alba</div><div class="meta"><b>#D9A441</b><br>RGB 217 164 65<br>HSL 39° 67% 55%<br>Solo para el punto de la cima · 7,7 sobre oscuro</div></div>
+      </div>
+      <div class="preview">
+        <div style="background:#EEF1F0;color:#0F1C26"><span class="t">Rigor científico. Software de altura.</span><span style="color:#3B4B57">Modo claro</span><span class="cta" style="background:#0F1C26;color:#EEF1F0">Hablemos de tus datos</span></div>
+        <div style="background:#0F1C26;color:#EEF1F0"><span class="t">Rigor científico. Software de altura.</span><span style="color:#A9B6BD">Modo oscuro</span><span class="cta" style="background:#7CC2C8;color:#0F1C26">Hablemos de tus datos</span></div>
+      </div>
+      <p class="note">Por qué: los azules profundos y el verde glaciar transmiten seguridad y calma sin caer en el «azul corporativo» de siempre. El dorado de la cima solo aparece en un punto, así que cuando aparece, se nota. Es la paleta que mejor encaja con el concepto del ascenso.</p>
+    </div>
+
+    <div class="palette">
+      <div class="palette-head"><h3>B · Cuarzo y cobalto</h3></div>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#1B1F24;color:#F3F3F0">Grafito</div><div class="meta"><b>#1B1F24</b><br>RGB 27 31 36<br>HSL 213° 14% 12%<br>Contraste 14,9</div></div>
+        <div class="sw"><div class="chip" style="background:#4A525C;color:#F3F3F0">Acero</div><div class="meta"><b>#4A525C</b><br>RGB 74 82 92<br>HSL 213° 11% 33%<br>Contraste 7,1</div></div>
+        <div class="sw"><div class="chip" style="background:#F3F3F0;color:#1B1F24">Cuarzo</div><div class="meta"><b>#F3F3F0</b><br>RGB 243 243 240<br>HSL 60° 11% 95%<br>Fondo</div></div>
+        <div class="sw"><div class="chip" style="background:#DADBD6;color:#1B1F24">Sílex</div><div class="meta"><b>#DADBD6</b><br>RGB 218 219 214<br>HSL 72° 6% 85%<br>Líneas</div></div>
+        <div class="sw"><div class="chip" style="background:#2C55C9;color:#F3F3F0">Cobalto</div><div class="meta"><b>#2C55C9</b><br>RGB 44 85 201<br>HSL 224° 64% 48%<br>Contraste 5,8 · sobre oscuro: #7FA0F0 (6,5)</div></div>
+      </div>
+      <p class="note">Sobria e institucional. Funciona bien, pero el azul cobalto es el color más común en tecnología y diferencia poco.</p>
+    </div>
+
+    <div class="palette">
+      <div class="palette-head"><h3>C · Bosque y latón</h3></div>
+      <div class="swatches">
+        <div class="sw"><div class="chip" style="background:#123A33;color:#ECEDE8">Bosque</div><div class="meta"><b>#123A33</b><br>RGB 18 58 51<br>HSL 170° 53% 15%<br>Contraste 10,6</div></div>
+        <div class="sw"><div class="chip" style="background:#3D5C52;color:#ECEDE8">Musgo</div><div class="meta"><b>#3D5C52</b><br>RGB 61 92 82<br>HSL 161° 20% 30%<br>Contraste 6,3</div></div>
+        <div class="sw"><div class="chip" style="background:#ECEDE8;color:#123A33">Piedra</div><div class="meta"><b>#ECEDE8</b><br>RGB 236 237 232<br>HSL 72° 12% 92%<br>Fondo</div></div>
+        <div class="sw"><div class="chip" style="background:#D3D8CF;color:#123A33">Liquen</div><div class="meta"><b>#D3D8CF</b><br>RGB 211 216 207<br>HSL 93° 10% 83%<br>Líneas</div></div>
+        <div class="sw"><div class="chip" style="background:#7E6219;color:#ECEDE8">Latón</div><div class="meta"><b>#7E6219</b><br>RGB 126 98 25<br>HSL 43° 67% 30%<br>Contraste 4,9 · sobre oscuro: #C9A54E (5,4)</div></div>
+      </div>
+      <p class="note">Elegante y cálida, con aire de instrumento de precisión antiguo. Muy distintiva, pero el verde se asocia a sostenibilidad o finanzas y podría confundir el mensaje.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- 7. Tipografía -->
+<section aria-labelledby="s7"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Tipografía · tres combinaciones</p><h2 id="s7">Tipografías con licencia libre (SIL Open Font License)</h2>
+    <p class="lead">Cada combinación tiene tres papeles: títulos, texto y datos. Todas se alojarán en el propio sitio, sin depender de Google, por rendimiento y privacidad.</p></div>
+  <div class="type">
+    <div class="type-row">
+      <div class="stack"><div class="palette-head"><h3>1 · Atlas</h3><span class="rec">Recomendada</span></div><p class="note">Newsreader · Instrument Sans · JetBrains Mono</p><p class="note">Una serifa de lectura científica para los titulares aporta elegancia y autoridad. La sans de texto es nítida y contemporánea, y la monoespaciada da un aire de cuaderno de laboratorio a cifras y anotaciones.</p></div>
+      <div class="stack"><p class="spec-d" style="font-family:'Newsreader',serif">Del ruido a la cima</p><p class="spec-b" style="font-family:'Instrument Sans',sans-serif">Diseñamos modelos estadísticos y de aprendizaje automático que se validan con datos reales y se explican con claridad.</p><p class="spec-m" style="font-family:'JetBrains Mono',monospace">h(x, y) = 0.97 · cota 2 410 m · error 1.8 %</p></div>
+    </div>
+    <div class="type-row">
+      <div class="stack"><h3>2 · Instrumento</h3><p class="note">Archivo (ancho variable) · Archivo · IBM Plex Mono</p><p class="note">Una sola familia que se ensancha en los títulos. Técnica y suiza, muy coherente, pero más fría.</p></div>
+      <div class="stack"><p class="spec-d" style="font-family:'Archivo',sans-serif;font-stretch:115%;font-weight:600">Del ruido a la cima</p><p class="spec-b" style="font-family:'Archivo',sans-serif">Diseñamos modelos estadísticos y de aprendizaje automático que se validan con datos reales y se explican con claridad.</p><p class="spec-m" style="font-family:'IBM Plex Mono',monospace">h(x, y) = 0.97 · cota 2 410 m · error 1.8 %</p></div>
+    </div>
+    <div class="type-row">
+      <div class="stack"><h3>3 · Publicación</h3><p class="note">Source Serif 4 · Source Sans 3 · Source Code Pro</p><p class="note">La superfamilia de Adobe: clásica, segura y muy legible, aunque con menos personalidad.</p></div>
+      <div class="stack"><p class="spec-d" style="font-family:'Source Serif 4',serif">Del ruido a la cima</p><p class="spec-b" style="font-family:'Source Sans 3',sans-serif">Diseñamos modelos estadísticos y de aprendizaje automático que se validan con datos reales y se explican con claridad.</p><p class="spec-m" style="font-family:'Source Code Pro',monospace">h(x, y) = 0.97 · cota 2 410 m · error 1.8 %</p></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 8. Dirección del logo -->
+<section aria-labelledby="s8"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Anticipo de la Fase 2</p><h2 id="s8">Hacia el logo</h2>
+    <p class="lead">El isotipo partirá de la tilde de la Á, convertida en el punto de la cima: un vértice construido con curvas de nivel y un único punto dorado. En la Fase 2 te presentaré 2 o 3 variantes dibujadas, con todas sus versiones.</p></div>
+</div></section>
+
+<!-- 9. Decisiones -->
+<section aria-labelledby="s9"><div class="wrap">
+  <div class="sec-head"><p class="eyebrow">Para tu aprobación</p><h2 id="s9">Cinco decisiones</h2></div>
+  <ol class="ask">
+    <li><div><b>Concepto de scrollytelling:</b> A · El ascenso (recomendado), B · El laboratorio o C · Constelación.</div></li>
+    <li><div><b>Paleta:</b> A · Altitud (recomendada), B · Cuarzo y cobalto o C · Bosque y latón.</div></li>
+    <li><div><b>Tipografía:</b> 1 · Atlas (recomendada), 2 · Instrumento o 3 · Publicación.</div></li>
+    <li><div><b>Eslogan:</b> A · «Rigor científico. Software de altura.» (recomendado), B o C.</div></li>
+    <li><div><b>Arquitectura y tono:</b> marca respaldada y tono «preciso, sereno, cercano». ¿Aprobados?</div></li>
+  </ol>
+</div></section>
+</main>
+
+<footer><div class="wrap"><p class="note">Ápice · Fase 1 · Paletas verificadas con la fórmula de contraste WCAG 2.1. Tipografías de Google Fonts bajo SIL Open Font License 1.1.</p></div></footer>
+
+<script>
+(function(){
+  const cv=document.getElementById('terrain'), ctx=cv.getContext('2d');
+  const range=document.getElementById('t'), playBtn=document.getElementById('play');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const phases=[
+    {t:'Ruido',b:'Todo empieza con datos dispersos: registros sueltos, formatos distintos, errores. Así llegan casi siempre.',d:'12 480 registros · 7 fuentes · 23 % incompletos'},
+    {t:'Estructura',b:'Limpiamos, integramos y ordenamos. Cada punto encuentra su lugar en una malla coherente.',d:'limpieza · validación · integración'},
+    {t:'Modelo',b:'El modelo revela la forma del problema. Aparecen las curvas de nivel: patrones que antes no se veían.',d:'estadística · aprendizaje automático · validación cruzada'},
+    {t:'Ascenso',b:'Con el modelo como mapa, cada decisión sube por la pendiente correcta, paso a paso, hacia el mejor resultado.',d:'optimización · ∇h · decisiones medibles'},
+    {t:'Cima',b:'En la cima, el resultado se convierte en producto. Desde arriba se ve la cordillera: cada producto es otra cumbre.',d:'Muévelo · AuditSoft · Ensayos clínicos · …'}
+  ];
+  // terrain: main summit + three product peaks
+  const peaks=[[0.60,0.36,1.0,0.17],[0.22,0.30,0.48,0.10],[0.30,0.72,0.42,0.10],[0.84,0.70,0.40,0.09]];
+  const h=(u,v)=>{let s=0;for(const[px,py,a,sg]of peaks){const dx=u-px,dy=v-py;s+=a*Math.exp(-(dx*dx+dy*dy)/(2*sg*sg));}return s+0.02*Math.sin(u*17)*Math.cos(v*13);};
+  // points
+  const GX=34,GY=22,pts=[];
+  let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+  for(let j=0;j<GY;j++)for(let i=0;i<GX;i++){const u=(i+.5)/GX,v=(j+.5)/GY;pts.push({u,v,su:rnd(),sv:rnd(),z:h(u,v)});}
+  // contours (marching squares) on finer grid
+  const CX=90,CY=60,H=[];for(let j=0;j<=CY;j++){H[j]=[];for(let i=0;i<=CX;i++)H[j][i]=h(i/CX,j/CY);}
+  const levels=[];for(let k=1;k<=11;k++)levels.push(k*0.085);
+  const segs=levels.map(L=>{const out=[];for(let j=0;j<CY;j++)for(let i=0;i<CX;i++){
+    const a=H[j][i],b=H[j][i+1],c=H[j+1][i+1],d=H[j+1][i];
+    const e=[];const lerp=(p,q,x0,y0,x1,y1)=>{const t=(L-p)/(q-p);return[(x0+(x1-x0)*t)/CX,(y0+(y1-y0)*t)/CY];};
+    if((a<L)!==(b<L))e.push(lerp(a,b,i,j,i+1,j));
+    if((b<L)!==(c<L))e.push(lerp(b,c,i+1,j,i+1,j+1));
+    if((c<L)!==(d<L))e.push(lerp(c,d,i+1,j+1,i,j+1));
+    if((d<L)!==(a<L))e.push(lerp(d,a,i,j+1,i,j));
+    if(e.length>=2)out.push([e[0],e[1]]);if(e.length===4)out.push([e[2],e[3]]);}return out;});
+  // gradient ascent path
+  const path=[[0.06,0.95]];{let[u,v]=path[0];for(let s=0;s<400;s++){const e=1e-3;const gu=(h(u+e,v)-h(u-e,v))/(2*e),gv=(h(u,v+e)-h(u,v-e))/(2*e);const n=Math.hypot(gu,gv);if(n<0.02)break;u+=0.008*gu/n;v+=0.008*gv/n;path.push([u,v]);if(Math.hypot(u-0.6,v-0.36)<0.01)break;}path.push([0.6,0.36]);}
+  const labels=[['Muévelo',0.22,0.30],['Ensayos clínicos',0.30,0.72],['AuditSoft',0.84,0.70]];
+  let W=0,Hh=0,dpr=1;
+  function size(){const r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;Hh=r.height;cv.width=W*dpr;cv.height=Hh*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw(+range.value);}
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const cl=x=>Math.max(0,Math.min(1,x)), ease=x=>x*x*(3-2*x);
+  let lastPhase=-1;
+  function draw(t){
+    const fg=css('--fg'),acc=css('--contour'),apex=css('--apex'),muted=css('--muted');
+    ctx.clearRect(0,0,W,Hh);
+    const pad=18,X=u=>pad+u*(W-2*pad),Y=v=>pad+v*(Hh-2*pad);
+    const s1=ease(cl(t)),s2=ease(cl(t-1)),s3=ease(cl(t-2)),s4=ease(cl(t-3));
+    // contours
+    if(s2>0){ctx.strokeStyle=acc;ctx.lineWidth=1;segs.forEach((ss,k)=>{ctx.globalAlpha=s2*(0.25+0.6*k/levels.length);ctx.beginPath();for(const[p,q]of ss){ctx.moveTo(X(p[0]),Y(p[1]));ctx.lineTo(X(q[0]),Y(q[1]));}ctx.stroke();});}
+    // points
+    ctx.fillStyle=fg;
+    for(const p of pts){const u=p.su+(p.u-p.su)*s1,v=p.sv+(p.v-p.sv)*s1;ctx.globalAlpha=(0.35+0.55*Math.min(1,p.z))*(1-0.75*s2);const r=1.1+1.6*p.z*s1;ctx.beginPath();ctx.arc(X(u),Y(v),r,0,6.283);ctx.fill();}
+    // path
+    if(s3>0){const n=Math.max(2,Math.floor(path.length*s3));ctx.globalAlpha=1;ctx.strokeStyle=fg;ctx.lineWidth=1.6;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(X(path[0][0]),Y(path[0][1]));for(let i=1;i<n;i++)ctx.lineTo(X(path[i][0]),Y(path[i][1]));ctx.stroke();ctx.setLineDash([]);const e=path[n-1];ctx.fillStyle=fg;ctx.beginPath();ctx.arc(X(e[0]),Y(e[1]),3,0,6.283);ctx.fill();}
+    // apex + products
+    if(s4>0){ctx.globalAlpha=s4;ctx.fillStyle=apex;const ax=X(0.6),ay=Y(0.36),r=7*s4;ctx.save();ctx.translate(ax,ay);ctx.rotate(Math.PI/4);ctx.fillRect(-r,-r,2*r,2*r);ctx.restore();
+      ctx.font='500 11px "JetBrains Mono", monospace';ctx.fillStyle=fg;ctx.textAlign='center';ctx.fillText('ÁPICE',ax,ay-16);
+      ctx.fillStyle=muted;for(const[l,u,v]of labels){ctx.beginPath();ctx.arc(X(u),Y(v),3,0,6.283);ctx.fill();ctx.fillText(l,X(u),Y(v)-10);}}
+    ctx.globalAlpha=1;
+    const ph=Math.min(4,Math.round(t-0.001<0?0:Math.min(4,Math.floor(t+0.5))));
+    if(ph!==lastPhase){lastPhase=ph;const P=phases[ph];
+      document.getElementById('pnum').textContent='FASE 0'+(ph+1)+' / 05';
+      document.getElementById('ptitle').textContent=P.t;document.getElementById('pbody').textContent=P.b;document.getElementById('pdata').textContent=P.d;
+      document.querySelectorAll('.steps button').forEach((b,i)=>b.setAttribute('aria-current',i===ph?'true':'false'));}
+  }
+  range.addEventListener('input',()=>{stop();draw(+range.value);});
+  let raf=0,playing=false;
+  function stop(){playing=false;cancelAnimationFrame(raf);playBtn.textContent='Reproducir';}
+  function animateTo(target,dur){stop();if(reduce){range.value=target;draw(target);return;}const from=+range.value,t0=performance.now();playing=true;
+    const step=now=>{const k=Math.min(1,(now-t0)/dur);const v=from+(target-from)*k;range.value=v;draw(v);if(k<1&&playing)raf=requestAnimationFrame(step);else stop();};raf=requestAnimationFrame(step);}
+  playBtn.addEventListener('click',()=>{if(playing){stop();return;}if(+range.value>=3.99)range.value=0;animateTo(4,9000*(1-(+range.value)/4)+400);playBtn.textContent='Pausa';playing=true;});
+  document.querySelectorAll('.steps button').forEach(b=>b.addEventListener('click',()=>animateTo(+b.dataset.t,900)));
+  new ResizeObserver(size).observe(cv);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>draw(+range.value));
+  new MutationObserver(()=>draw(+range.value)).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+  if(document.fonts)document.fonts.ready.then(()=>draw(+range.value));
+})();
+</script>
