@@ -119,11 +119,12 @@ const fill = (v: string) => v.replace('{products}', String(products.length)).rep
   .hero { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: var(--space-5); padding-top: 4rem; will-change: opacity, transform; }
   .hero .eyebrow { color: var(--c-glacier-light); }
   .hero-title { font-size: var(--text-4xl); line-height: 0.98; letter-spacing: -0.025em; font-weight: 350; display: grid; }
-  .hero-title .line { display: block; overflow: hidden; padding-bottom: 0.08em; }
+  .hero-title .line { display: block; padding-bottom: 0.08em; }
   .hero-title .line:nth-child(2) { font-style: italic; color: #f3dca8; }
   .hero-title .line > span { display: inline-block; }
-  :global(.js-motion) .story .stage .hero-title .line > span { transform: translateY(110%); animation: rise 1.3s var(--ease-out) forwards; animation-delay: var(--d); }
-  @keyframes rise { to { transform: none; } }
+  :global(.js-motion) .story .stage .hero-title .line > span { animation: rise 1.6s var(--ease-out) both; animation-delay: var(--d); }
+  /* Sin ocultar el texto: aparece desde el primer pintado (LCP inmediato) y solo se asienta. */
+  @keyframes rise { from { transform: translateY(0.18em); letter-spacing: 0.01em; } to { transform: none; letter-spacing: -0.025em; } }
   .hero-lead { max-width: 44ch; font-size: var(--text-lg); color: #C9D3D6; }
   .hero-actions { display: flex; gap: var(--space-4); flex-wrap: wrap; margin-top: var(--space-3); }
   .hero-actions.center { justify-content: center; }

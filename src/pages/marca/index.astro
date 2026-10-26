@@ -1,0 +1,519 @@
+---
+/**
+ * Brand Guidelines de Ápice. Lee los tokens (src/design/tokens.ts) y los logos generados,
+ * así que siempre refleja el sistema real del sitio.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Logo from '../../components/Logo.astro';
+import Icon from '../../components/Icon.astro';
+import Topo from '../../components/Topo.astro';
+import { palette, contrast, typography, motion } from '../../design/tokens';
+import { asset } from '../../i18n';
+import { es } from '../../i18n/es';
+
+const nav = [
+  ['esencia', 'Esencia'], ['arquitectura', 'Arquitectura'], ['tono', 'Tono de voz'], ['logo', 'Logo'],
+  ['color', 'Color'], ['tipografia', 'Tipografía'], ['iconos', 'Iconografía'], ['ilustracion', 'Ilustración'],
+  ['fotografia', 'Fotografía'], ['movimiento', 'Movimiento'], ['aplicaciones', 'Aplicaciones'], ['descargas', 'Descargas'],
+];
+const b = (p: string) => asset(`brand/${p}`);
+const logoVariants = [
+  { name: 'Horizontal', file: 'apice-horizontal', bg: 'light', v: 'horizontal' as const },
+  { name: 'Horizontal · oscuro', file: 'apice-horizontal-oscuro', bg: 'dark', v: 'horizontal' as const },
+  { name: 'Vertical', file: 'apice-vertical', bg: 'light', v: 'vertical' as const },
+  { name: 'Isotipo', file: 'apice-isotipo', bg: 'light', v: 'isotipo' as const },
+  { name: 'Isotipo · oscuro', file: 'apice-isotipo-oscuro', bg: 'dark', v: 'isotipo' as const },
+  { name: 'Logotipo', file: 'apice-logotipo', bg: 'light', v: 'logotipo' as const },
+  { name: 'Monocromo negro', file: 'apice-horizontal-mono-negro', bg: 'light', v: 'horizontal' as const, mono: true },
+  { name: 'Monocromo blanco', file: 'apice-horizontal-mono-blanco', bg: 'dark', v: 'horizontal' as const, mono: true },
+];
+const sw = Object.entries(palette);
+const iconNames = ['advisory', 'statistics', 'ml', 'ai', 'analytics', 'custom', 'arrow', 'external', 'mail', 'copy', 'check', 'shield'] as const;
+const fam = typography.families;
+---
+<BaseLayout lang="es" route="brand" title="Brand Guidelines" description="Sistema de marca de Ápice: logo, color, tipografía, iconografía, movimiento y aplicaciones." og="brand" noAlternate>
+  <section class="bhero" data-tone="dark">
+    <div class="bmap" aria-hidden="true"><Topo seed="apice-brand" levels={22} peaks={3} /></div>
+    <div class="container bhero-in">
+      <p class="eyebrow">Brand Guidelines · v1.0</p>
+      <h1>Sistema de marca</h1>
+      <p class="lead">Todo lo necesario para que Ápice se vea, suene y se mueva igual en cualquier lugar. Los colores, tipografías y medidas de esta página salen de los mismos tokens que usa el sitio.</p>
+    </div>
+  </section>
+
+  <div class="container blayout">
+    <nav class="toc" aria-label="Secciones del manual">
+      <ol>{nav.map(([id, label], i) => <li><a href={`#${id}`}><span class="mono">{String(i + 1).padStart(2, '0')}</span>{label}</a></li>)}</ol>
+    </nav>
+
+    <div class="bcontent">
+      <!-- 01 Esencia -->
+      <section id="esencia" class="bsec">
+        <p class="eyebrow">01 · Esencia</p>
+        <h2>Qué es Ápice</h2>
+        <div class="two">
+          <div class="stack">
+            <h3>Posicionamiento</h3>
+            <p>Ápice es un estudio de software y ciencia de datos que trata cada producto y cada modelo como un experimento serio: con hipótesis, validación y resultados que se pueden comprobar.</p>
+            <h3>Propuesta de valor</h3>
+            <p class="quote">{es.about.mission}</p>
+          </div>
+          <div class="stack">
+            <h3>Eslogan</h3>
+            <p class="slogan">Rigor científico.<br /><i>Software de altura.</i></p>
+            <p class="note">En inglés: «Scientific rigour. Software at its peak.»</p>
+          </div>
+        </div>
+        <h3 class="mt">Pilares</h3>
+        <ul class="pillars">{es.about.values.map((v) => <li><b>{v.title}</b><span>{v.text}</span></li>)}</ul>
+        <h3 class="mt">La idea central</h3>
+        <p>Los datos son un terreno. Las curvas de nivel de un mapa topográfico son una visualización de datos real; la cima es el punto más alto de una función, lo que busca un algoritmo de optimización. Nombre, ciencia y estética cuentan la misma historia: del ruido a la cima.</p>
+      </section>
+
+      <!-- 02 Arquitectura -->
+      <section id="arquitectura" class="bsec">
+        <p class="eyebrow">02 · Arquitectura</p>
+        <h2>Marca madre que respalda</h2>
+        <p>Modelo de <b>marca respaldada</b>. Cada producto conserva su nombre y su color de acento porque sirve a sectores distintos; todos comparten tipografía, retícula y la firma «por Ápice».</p>
+        <div class="arch">
+          <div class="arch-top"><Logo variant="horizontal" class="arch-logo" /></div>
+          <div class="arch-kids">
+            <div><b>Ápice Servicios</b><span>Datos, estadística e IA a medida</span></div>
+            <div><b>Muévelo</b><span>por Ápice · logística</span></div>
+            <div class="dash"><b>Próximos productos</b><span>una entrada en products.config.ts</span></div>
+          </div>
+        </div>
+        <ul class="rules">
+          <li>El nombre del producto va primero y en su propio color; «por Ápice» acompaña en tipografía mono, nunca más grande.</li>
+          <li>Los productos en colaboración pueden mostrar el nombre de la institución socia solo con permiso escrito.</li>
+          <li>Cada producto usa Newsreader e Instrument Sans y su emblema topográfico generado a partir de su nombre.</li>
+        </ul>
+      </section>
+
+      <!-- 03 Tono -->
+      <section id="tono" class="bsec">
+        <p class="eyebrow">03 · Tono de voz</p>
+        <h2>Preciso, sereno, cercano</h2>
+        <p>Hablamos como una científica que explica su trabajo a alguien inteligente que no es del área: datos concretos, sin exagerar, sin jerga innecesaria. En inglés mantenemos el tono; no traducimos palabra por palabra.</p>
+        <div class="dd">
+          <div class="h">Decimos</div><div class="h">Evitamos</div>
+          <p>Reducimos el tiempo de revisión documental de días a horas.</p><p class="no">Revolucionamos la auditoría con IA disruptiva.</p>
+          <p>Validamos cada modelo con datos que no vio durante el entrenamiento.</p><p class="no">Nuestra IA de última generación nunca se equivoca.</p>
+          <p>Te decimos qué podemos resolver y qué no.</p><p class="no">¡Soluciones 360° para todas tus necesidades!</p>
+          <p>Análisis estadístico, modelos predictivos, aprendizaje automático.</p><p class="no">Sinergias data-driven de next level.</p>
+        </div>
+        <ul class="rules">
+          <li>Frases cortas, voz activa, verbos concretos.</li>
+          <li>Cifras con su unidad y su contexto; nunca cifras sin fuente.</li>
+          <li>Tuteo en español; trato directo y respetuoso.</li>
+          <li>Nombres de personas y cargos no aparecen en la web corporativa.</li>
+        </ul>
+      </section>
+
+      <!-- 04 Logo -->
+      <section id="logo" class="bsec">
+        <p class="eyebrow">04 · Logo</p>
+        <h2>Tres crestas y una cima</h2>
+        <div class="two">
+          <div class="logo-hero"><Logo variant="isotipo" animated class="lh" /></div>
+          <div class="stack">
+            <p>El isotipo son <b>tres crestas paralelas</b>: curvas de nivel de una montaña asimétrica, como las reales, que juntas forman una A. El <b>rombo dorado</b> es la cima y, a la vez, la tilde de la Á: el mismo rombo corona el logotipo.</p>
+            <p>El logotipo es Newsreader Medium convertida a trazos, con «Ápice» en mayúscula inicial. Los archivos no dependen de fuentes instaladas.</p>
+            <button class="btn btn--ghost replay" type="button" data-replay>Reproducir animación</button>
+          </div>
+        </div>
+
+        <h3 class="mt">Variantes</h3>
+        <ul class="variants">
+          {logoVariants.map((l) => (
+            <li>
+              <div class:list={['vbox', l.bg]}><Logo variant={l.v === 'vertical' ? 'horizontal' : l.v} mono={l.mono} class={`vlogo vlogo--${l.v}`} /></div>
+              <div class="vmeta">
+                <b>{l.name}</b>
+                <span>
+                  <a href={b(`logo/${l.file}.svg`)} download>SVG</a>
+                  {['apice-horizontal', 'apice-horizontal-oscuro', 'apice-vertical', 'apice-isotipo'].includes(l.file) && <a href={b(`png/${l.file}${l.file === 'apice-isotipo' ? '-1024' : '-1200'}.png`)} download>PNG</a>}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <p class="note">La versión vertical se muestra aquí en horizontal por espacio; descarga el archivo para ver la composición apilada.</p>
+
+        <div class="three mt">
+          <div class="stack">
+            <h3>Área de protección</h3>
+            <div class="clear"><div class="clear-in"><Logo variant="horizontal" class="cl" /></div></div>
+            <p class="note">Deja libre alrededor del logo, como mínimo, la altura del isotipo dividida entre dos.</p>
+          </div>
+          <div class="stack">
+            <h3>Tamaño mínimo</h3>
+            <div class="mins">
+              <div><Logo variant="horizontal" class="m1" /><span class="mono">96 px · 22 mm</span></div>
+              <div><Logo variant="isotipo" class="m2" /><span class="mono">16 px · 5 mm</span></div>
+            </div>
+            <p class="note">Por debajo de estas medidas, usa solo el isotipo o el favicon.</p>
+          </div>
+          <div class="stack">
+            <h3>Fondos</h3>
+            <div class="bgs">
+              <span class="ok l"><Logo variant="isotipo" /></span><span class="ok d"><Logo variant="isotipo" /></span><span class="ok g"><Logo variant="isotipo" mono /></span>
+            </div>
+            <p class="note">Sobre Niebla o Noche alpina, a color. Sobre fotos o colores ajenos a la paleta, en monocromo blanco o negro.</p>
+          </div>
+        </div>
+
+        <h3 class="mt">Usos incorrectos</h3>
+        <ul class="misuse">
+          <li><div class="mbox"><span style="display:inline-block;transform:scaleX(1.5)"><Logo variant="isotipo" /></span></div><p>No deformar</p></li>
+          <li><div class="mbox"><span style="display:inline-block;transform:rotate(-20deg)"><Logo variant="isotipo" /></span></div><p>No girar</p></li>
+          <li><div class="mbox"><span style="display:inline-block;color:#c0392b;filter:hue-rotate(160deg)"><Logo variant="isotipo" /></span></div><p>No cambiar colores</p></li>
+          <li><div class="mbox"><span style="display:inline-block;filter:drop-shadow(4px 6px 3px rgba(0,0,0,.6))"><Logo variant="isotipo" /></span></div><p>No añadir efectos</p></li>
+          <li><div class="mbox busy"><Logo variant="isotipo" /></div><p>No usar sobre fondos con ruido</p></li>
+          <li><div class="mbox"><span style="display:inline-block;opacity:.35"><Logo variant="isotipo" /></span></div><p>No reducir la opacidad</p></li>
+        </ul>
+      </section>
+
+      <!-- 05 Color -->
+      <section id="color" class="bsec">
+        <p class="eyebrow">05 · Color</p>
+        <h2>Paleta «Altitud»</h2>
+        <p>Fondos de baja saturación, cómodos para leer mucho tiempo; azul noche y verde glaciar para transmitir calma y seguridad; un único dorado reservado para la cima. Cuando el dorado aparece, se nota.</p>
+        <div class="prop" aria-label="Proporción de uso">
+          <span style="flex:58;background:var(--c-mist)">Niebla 58 %</span><span style="flex:27;background:var(--c-night);color:#EEF1F0">Noche 27 %</span><span style="flex:10;background:var(--c-glacier);color:#fff">Glaciar 10 %</span><span style="flex:5;background:var(--c-dawn)" title="Alba 5 %"></span>
+        </div>
+        <ul class="swatches">
+          {sw.map(([, c]) => (
+            <li>
+              <div class="chip" style={`background:${c.hex}`}></div>
+              <div class="cmeta">
+                <b>{c.name}</b>
+                <span class="mono">{c.hex}</span>
+                <span class="mono">RGB {c.rgb}</span>
+                <span class="mono">HSL {c.hsl}</span>
+                <span class="role">{c.role}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <h3 class="mt">Contraste (WCAG 2.1)</h3>
+        <div class="table-wrap">
+          <table class="ctable">
+            <thead><tr><th>Texto</th><th>Fondo</th><th>Muestra</th><th>Ratio</th><th>Nivel</th></tr></thead>
+            <tbody>
+              {contrast.map((c) => (
+                <tr>
+                  <td>{palette[c.fg].name}</td><td>{palette[c.bg].name}</td>
+                  <td><span class="sample" style={`color:${palette[c.fg].hex};background:${palette[c.bg].hex}`}>Aa Ápice</span></td>
+                  <td class="mono">{c.ratio.toFixed(2)} : 1</td><td><span class="lvl">{c.level}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="note">AA exige 4,5 : 1 para texto normal y 3 : 1 para texto grande y gráficos. El dorado Alba no se usa para texto pequeño sobre fondos claros: para eso existe Alba profunda.</p>
+      </section>
+
+      <!-- 06 Tipografía -->
+      <section id="tipografia" class="bsec">
+        <p class="eyebrow">06 · Tipografía</p>
+        <h2>Atlas: tres voces</h2>
+        <div class="faces">
+          <div class="face"><p class="fname mono">{fam.display.name} · {fam.display.role}</p><p class="spec" style={`font-family:${fam.display.stack}`}>Del ruido a la cima</p><p class="note">{fam.display.license} · Google Fonts</p></div>
+          <div class="face"><p class="fname mono">{fam.sans.name} · {fam.sans.role}</p><p class="spec sans" style={`font-family:${fam.sans.stack}`}>Diseñamos modelos que se validan con datos reales y se explican con claridad.</p><p class="note">{fam.sans.license} · Google Fonts</p></div>
+          <div class="face"><p class="fname mono">{fam.mono.name} · {fam.mono.role}</p><p class="spec monos" style={`font-family:${fam.mono.stack}`}>h(x, y) = 0,97 · cota 2 410 m · error 1,8 %</p><p class="note">{fam.mono.license} · Google Fonts</p></div>
+        </div>
+        <h3 class="mt">Escala</h3>
+        <ul class="scale">
+          {Object.entries(typography.scale).reverse().map(([k, v]) => (
+            <li><span class="mono k">{k}</span><span class="mono v">{v}</span><span class="t" style={`font-size:${v};font-family:${['4xl', '3xl', '2xl', 'xl'].includes(k) ? fam.display.stack : fam.sans.stack}`}>Rigor científico</span></li>
+          ))}
+        </ul>
+        <ul class="rules">
+          <li>Titulares en Newsreader, peso ligero (350–400). La cursiva se reserva para la segunda frase del eslogan y las frases destacadas.</li>
+          <li>Texto en Instrument Sans 400, interlineado 1,6, líneas de 60–70 caracteres.</li>
+          <li>Cifras, coordenadas y etiquetas en JetBrains Mono, en mayúsculas con espaciado amplio.</li>
+        </ul>
+      </section>
+
+      <!-- 07 Iconos -->
+      <section id="iconos" class="bsec">
+        <p class="eyebrow">07 · Iconografía</p>
+        <h2>Lineales, precisos, escasos</h2>
+        <ul class="icons">{iconNames.map((n) => <li><Icon name={n} size={32} /><span class="mono">{n}</span></li>)}</ul>
+        <ul class="rules">
+          <li>Retícula de 24 px, trazo de 1,5 px, terminaciones y uniones rectas.</li>
+          <li>Siempre acompañados de texto. Un icono no sustituye a una palabra.</li>
+          <li>Color de texto o Glaciar; Alba solo en el estado activo.</li>
+          <li>Los iconos viven en <code>src/components/Icon.astro</code>.</li>
+        </ul>
+      </section>
+
+      <!-- 08 Ilustración -->
+      <section id="ilustracion" class="bsec">
+        <p class="eyebrow">08 · Ilustración</p>
+        <h2>Mapas generados, no dibujados</h2>
+        <p>La ilustración de Ápice es topografía generada por código: cada producto, servicio o pieza tiene un emblema único que se calcula a partir de su nombre. Es imposible de copiar con un banco de imágenes y crece sola con el catálogo.</p>
+        <ul class="topos">
+          {['muevelo', 'asesoria', 'estadistica', 'aprendizaje-automatico'].map((s, i) => (
+            <li style={`color:${i === 0 ? '#E07A3F' : 'var(--accent)'}`}><Topo seed={s} levels={14} peaks={3} /><span class="mono">seed: {s}</span></li>
+          ))}
+        </ul>
+        <ul class="rules">
+          <li>Trazo fino (0,8–1,3 px), sin rellenos; cada quinta curva, más gruesa.</li>
+          <li>Un único color por emblema; el rombo dorado marca la cima.</li>
+          <li>En 3D (portada) se usa la misma lógica: partículas, curvas de nivel y una ruta de ascenso.</li>
+        </ul>
+      </section>
+
+      <!-- 09 Fotografía -->
+      <section id="fotografia" class="bsec">
+        <p class="eyebrow">09 · Fotografía</p>
+        <h2>Casi nunca, y siempre con intención</h2>
+        <div class="two">
+          <ul class="rules">
+            <li><b>Sí:</b> texturas naturales de alta montaña: roca, nieve, niebla, luz de amanecer. Encuadres abstractos, sin horizonte evidente.</li>
+            <li><b>Sí:</b> tratamiento en dos tonos con Noche alpina y Niebla, o en blanco y negro con grano fino.</li>
+            <li><b>Sí:</b> capturas reales de nuestros productos, en dispositivos sin marca.</li>
+          </ul>
+          <ul class="rules">
+            <li><b>No:</b> personas posando frente a portátiles, apretones de manos, oficinas genéricas.</li>
+            <li><b>No:</b> cerebros brillantes, robots, redes de nodos neón ni degradados morados.</li>
+            <li><b>No:</b> fotos de los fundadores o del equipo en la web corporativa.</li>
+          </ul>
+        </div>
+        <p class="note">Fuentes recomendadas con licencia libre: Unsplash y Pexels. Registra cada imagen en ATTRIBUTIONS.md.</p>
+      </section>
+
+      <!-- 10 Movimiento -->
+      <section id="movimiento" class="bsec">
+        <p class="eyebrow">10 · Movimiento</p>
+        <h2>Como un ascenso, no como una explosión</h2>
+        <div class="two">
+          <ul class="mtokens">
+            {Object.entries(motion.duration).map(([k, v]) => <li><span class="mono">--dur-{k}</span><b class="mono">{v}</b></li>)}
+            {Object.entries(motion.ease).map(([k, v]) => <li><span class="mono">--ease-{k.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())}</span><b class="mono">{v}</b></li>)}
+          </ul>
+          <div class="motion-demo" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <ul class="rules">
+          <li>Las cosas suben y se asientan. Nada rebota ni gira sin motivo.</li>
+          <li>Un momento orquestado por pantalla; el resto, quieto.</li>
+          <li>Con «reducir movimiento» activado, el contenido aparece sin animación y la historia 3D se sustituye por láminas estáticas.</li>
+        </ul>
+      </section>
+
+      <!-- 11 Aplicaciones -->
+      <section id="aplicaciones" class="bsec">
+        <p class="eyebrow">11 · Aplicaciones</p>
+        <h2>La marca en uso</h2>
+        <h3>Tarjetas de presentación</h3>
+        <div class="cards">
+          <img src={b('tarjetas/tarjeta-frente.png')} alt="Tarjeta de Ápice, frente: logo sobre Noche alpina con curvas de nivel" width="1288" height="832" loading="lazy" />
+          <img src={b('tarjetas/tarjeta-dorso.png')} alt="Tarjeta de Ápice, dorso: eslogan, isotipo y dirección web" width="1288" height="832" loading="lazy" />
+        </div>
+        <p class="note">85 × 55 mm con 3 mm de sangrado. <a href={b('tarjetas/tarjeta-apice-imprenta.pdf')} download>PDF para imprenta</a> · <a href={b('tarjetas/tarjeta-apice.html')}>HTML editable</a>. Para tarjetas personales, rellena nombre y cargo en <code>brand/datos.json</code> y ejecuta <code>npm run brand:render</code>.</p>
+
+        <h3 class="mt">Firma de correo</h3>
+        <img class="sig" src={b('email/firma-apice.png')} alt="Firma de correo de Ápice" width="560" height="140" loading="lazy" />
+        <p class="note"><a href={b('email/firma-apice.html')}>Abrir la firma en HTML</a>: selecciona todo, copia y pégalo en la configuración de firma de Gmail, Outlook o Apple Mail.</p>
+
+        <h3 class="mt">Presentación y documento</h3>
+        <div class="slides">
+          {[1, 2, 3, 4, 5].map((n) => <img src={b(`plantillas/diapositiva-${n}.png`)} alt={`Plantilla de presentación, diapositiva ${n}`} width="1920" height="1080" loading="lazy" />)}
+          <img src={b('plantillas/documento-apice.png')} alt="Plantilla de documento A4 con membrete" width="794" height="1123" loading="lazy" class="doc" />
+        </div>
+        <p class="note"><a href={b('plantillas/presentacion-apice.pdf')} download>Presentación PDF</a> · <a href={b('plantillas/presentacion-apice.html')}>HTML editable</a> · <a href={b('plantillas/documento-apice.pdf')} download>Documento PDF</a> · <a href={b('plantillas/documento-apice.html')}>HTML editable</a></p>
+
+        <h3 class="mt">Redes sociales</h3>
+        <div class="social">
+          <img src={b('redes/post-cuadrado-1080.png')} alt="Publicación cuadrada" width="1080" height="1080" loading="lazy" />
+          <img src={b('redes/post-vertical-1080x1350.png')} alt="Publicación vertical" width="1080" height="1350" loading="lazy" />
+          <img src={b('redes/historia-1080x1920.png')} alt="Historia vertical" width="1080" height="1920" loading="lazy" />
+          <img class="wide" src={b('redes/banner-linkedin-1584x396.png')} alt="Banner de LinkedIn" width="1584" height="396" loading="lazy" />
+          <img class="wide" src={b('redes/cabecera-x-1500x500.png')} alt="Cabecera de X" width="1500" height="500" loading="lazy" />
+        </div>
+
+        <h3 class="mt">Favicon e imágenes para compartir</h3>
+        <div class="og">
+          <div class="favs"><img src={asset('favicon.svg')} alt="Favicon" width="64" height="64" /><img src={asset('apple-touch-icon.png')} alt="Icono de app" width="90" height="90" /></div>
+          <img src={asset('og/home-es.png')} alt="Imagen para compartir la portada" width="1200" height="630" loading="lazy" />
+          <img src={asset('og/product-muevelo-es.png')} alt="Imagen para compartir Muévelo" width="1200" height="630" loading="lazy" />
+        </div>
+        <p class="note">Las imágenes para compartir se generan solas en cada compilación, una por página y producto.</p>
+      </section>
+
+      <!-- 12 Descargas -->
+      <section id="descargas" class="bsec">
+        <p class="eyebrow">12 · Descargas</p>
+        <h2>Archivos</h2>
+        <ul class="dl">
+          <li><a href={b('logo/apice-horizontal.svg')} download>Logo horizontal (SVG)</a></li>
+          <li><a href={b('logo/apice-vertical.svg')} download>Logo vertical (SVG)</a></li>
+          <li><a href={b('logo/apice-isotipo.svg')} download>Isotipo (SVG)</a></li>
+          <li><a href={b('logo/apice-animado.svg')}>Logo animado (SVG)</a></li>
+          <li><a href={b('png/apice-horizontal-1200.png')} download>Logo horizontal (PNG)</a></li>
+          <li><a href={b('png/apice-isotipo-app-1024.png')} download>Icono de app (PNG)</a></li>
+          <li><a href={b('tarjetas/tarjeta-apice-imprenta.pdf')} download>Tarjeta para imprenta (PDF)</a></li>
+          <li><a href={b('plantillas/presentacion-apice.pdf')} download>Presentación (PDF)</a></li>
+          <li><a href={b('plantillas/documento-apice.pdf')} download>Documento (PDF)</a></li>
+          <li><a href={b('email/firma-apice.html')}>Firma de correo (HTML)</a></li>
+        </ul>
+        <p class="note">El código fuente de todas las piezas está en el repositorio, en <code>brand/</code> y <code>scripts/brand/</code>.</p>
+      </section>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .bhero { position: relative; background: var(--c-night); color: #EEF1F0; padding-block: calc(9rem + env(safe-area-inset-top, 0px)) 5rem; overflow: hidden; isolation: isolate; }
+  .bmap { position: absolute; right: -10%; top: 50%; width: min(760px, 90vw); transform: translateY(-50%); color: var(--c-glacier-light); opacity: 0.4; z-index: -1; }
+  .bhero-in { display: grid; gap: var(--space-5); }
+  .bhero h1 { font-size: var(--text-4xl); }
+  .bhero .lead { color: #C9D3D6; }
+  .blayout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: var(--space-8); padding-block: var(--space-9); }
+  .toc { position: sticky; top: 6rem; align-self: start; }
+  .toc ol { list-style: none; display: grid; gap: 0.15rem; }
+  .toc a { display: flex; gap: 0.8rem; padding: 0.4rem 0; text-decoration: none; font-size: var(--text-sm); color: var(--muted); }
+  .toc a:hover { color: var(--fg); }
+  .toc .mono { font-size: 0.7rem; color: var(--gold-text); padding-top: 0.15rem; }
+  .bcontent { display: grid; gap: var(--space-10); min-width: 0; }
+  .bsec { display: grid; gap: var(--space-5); scroll-margin-top: 6rem; }
+  .bsec h2 { font-size: var(--text-2xl); }
+  .bsec h3 { font-size: var(--text-lg); font-family: var(--font-sans); font-weight: 600; letter-spacing: 0; }
+  .bsec > p, .bsec .stack > p { color: var(--muted); max-width: 68ch; }
+  .mt { margin-top: var(--space-5); }
+  .note { font-size: var(--text-sm); color: var(--muted); }
+  .note a, .dl a { color: var(--accent); }
+  code { font-family: var(--font-mono); font-size: 0.85em; background: color-mix(in srgb, var(--line) 45%, transparent); padding: 0.1em 0.35em; }
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-7); }
+  .three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
+  .stack { display: grid; gap: var(--space-4); align-content: start; }
+  .quote { font: 380 var(--text-xl)/1.3 var(--font-display); color: var(--fg) !important; }
+  .slogan { font: 380 var(--text-2xl)/1.05 var(--font-display); }
+  .slogan i { color: var(--gold-text); }
+  .pillars { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-5); }
+  .pillars li { display: grid; gap: var(--space-2); border-top: 1px solid var(--fg); padding-top: var(--space-4); font-size: var(--text-sm); color: var(--muted); }
+  .pillars b { color: var(--fg); font: 400 var(--text-lg) var(--font-display); }
+  .rules { list-style: none; display: grid; gap: var(--space-3); }
+  .rules li { position: relative; padding-left: 1.3rem; color: var(--muted); font-size: var(--text-sm); max-width: 70ch; }
+  .rules li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 6px; height: 6px; background: var(--c-dawn); transform: rotate(45deg); }
+  .rules b { color: var(--fg); }
+  .arch { display: grid; gap: var(--space-5); justify-items: center; padding: var(--space-7) var(--space-5); border: 1px solid var(--line); background: var(--surface); }
+  .arch :global(.arch-logo) { width: 180px; }
+  .arch-kids { display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: center; }
+  .arch-kids div { border: 1px solid var(--line); padding: 0.9rem 1.1rem; display: grid; gap: 0.2rem; min-width: 180px; background: var(--bg); }
+  .arch-kids span { font: 400 0.72rem/1.3 var(--font-mono); color: var(--muted); }
+  .arch-kids .dash { border-style: dashed; }
+  .dd { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); }
+  .dd > * { padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--line); margin: 0; }
+  .dd > :nth-child(odd) { border-right: 1px solid var(--line); }
+  .dd .h { font: 500 0.72rem/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .dd p { font-family: var(--font-display); font-size: var(--text-base); }
+  .dd .no { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); font-family: var(--font-sans); font-size: var(--text-sm); }
+  .logo-hero { display: grid; place-items: center; background: var(--c-night); color: #EEF1F0; aspect-ratio: 4 / 3; }
+  .logo-hero :global(.lh) { width: 46%; }
+  .replay { justify-self: start; }
+  .variants { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: var(--space-4); }
+  .variants li { border: 1px solid var(--line); display: grid; }
+  .vbox { display: grid; place-items: center; aspect-ratio: 16 / 9; padding: 1.5rem; }
+  .vbox.light { background: #EEF1F0; color: #0F1C26; }
+  .vbox.dark { background: #0F1C26; color: #EEF1F0; }
+  .vbox :global(.vlogo) { width: 70%; }
+  .vbox :global(.vlogo--isotipo) { width: 28%; }
+  .vmeta { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.7rem 0.9rem; font-size: var(--text-sm); border-top: 1px solid var(--line); background: var(--surface); }
+  .vmeta span { display: flex; gap: 0.7rem; font: 500 0.75rem var(--font-mono); }
+  .vmeta a { color: var(--accent); }
+  .clear { background: #EEF1F0; color: #0F1C26; padding: 1rem; display: grid; place-items: center; aspect-ratio: 16 / 10; }
+  .clear-in { outline: 1px dashed #D9A441; outline-offset: 0; padding: 14px; background: repeating-linear-gradient(45deg, rgba(217,164,65,.12) 0 6px, transparent 6px 12px); }
+  .clear-in :global(.cl) { width: 150px; background: #EEF1F0; }
+  .mins { display: grid; gap: 1rem; padding: 1rem; background: #EEF1F0; color: #0F1C26; }
+  .mins div { display: flex; align-items: center; gap: 1rem; }
+  .mins :global(.m1) { width: 96px; } .mins :global(.m2) { width: 16px; }
+  .mins span { font-size: 0.72rem; color: #3B4B57; }
+  .bgs { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .bgs .ok { display: grid; place-items: center; aspect-ratio: 1; }
+  .bgs .ok :global(svg) { width: 45%; }
+  .bgs .l { background: #EEF1F0; color: #0F1C26; } .bgs .d { background: #0F1C26; color: #EEF1F0; } .bgs .g { background: #25707A; color: #fff; }
+  .misuse { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr)); gap: var(--space-4); }
+  .misuse li { display: grid; gap: 0.5rem; font-size: var(--text-sm); color: var(--muted); }
+  .mbox { position: relative; aspect-ratio: 1; display: grid; place-items: center; background: #EEF1F0; color: #0F1C26; border: 1px solid var(--line); overflow: hidden; }
+  .mbox :global(svg) { width: 52px; }
+  .mbox::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top right, transparent calc(50% - 1px), #B3261E calc(50% - 1px), #B3261E calc(50% + 1px), transparent calc(50% + 1px)); }
+  .busy { background: repeating-conic-gradient(#D9A441 0 25%, #7CC2C8 0 50%) 0 0 / 18px 18px; }
+  .prop { display: flex; height: 54px; border: 1px solid var(--line); font: 500 0.72rem var(--font-mono); }
+  .prop span { display: flex; align-items: flex-end; padding: 0.5rem; color: #0F1C26; white-space: nowrap; overflow: hidden; }
+  .swatches { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: var(--space-4); }
+  .swatches li { border: 1px solid var(--line); display: grid; }
+  .chip { height: 96px; border-bottom: 1px solid var(--line); }
+  .cmeta { padding: 0.8rem; display: grid; gap: 0.2rem; font-size: 0.75rem; background: var(--surface); }
+  .cmeta b { font-size: var(--text-sm); }
+  .cmeta .role { color: var(--muted); margin-top: 0.3rem; }
+  .table-wrap { overflow-x: auto; }
+  .ctable { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+  .ctable th, .ctable td { text-align: left; padding: 0.65rem 0.8rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .ctable th { font: 500 0.7rem var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .sample { display: inline-block; padding: 0.25rem 0.6rem; font-family: var(--font-display); }
+  .lvl { font: 500 0.7rem var(--font-mono); padding: 0.2rem 0.45rem; border: 1px solid var(--accent); color: var(--accent); }
+  .faces { display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .face { display: grid; gap: var(--space-3); padding-block: var(--space-6); border-bottom: 1px solid var(--line); }
+  .fname { font-size: 0.75rem; color: var(--gold-text); letter-spacing: 0.08em; }
+  .spec { font-size: var(--text-3xl); line-height: 1.05; }
+  .spec.sans { font-size: var(--text-xl); line-height: 1.35; max-width: 34ch; }
+  .spec.monos { font-size: var(--text-lg); color: var(--accent); }
+  .scale { list-style: none; display: grid; }
+  .scale li { display: grid; grid-template-columns: 3rem minmax(0, 15rem) minmax(0, 1fr); gap: var(--space-4); align-items: baseline; padding-block: 0.6rem; border-bottom: 1px solid var(--line); }
+  .scale .k { font-size: 0.75rem; color: var(--gold-text); }
+  .scale .v { font-size: 0.68rem; color: var(--muted); overflow-wrap: anywhere; }
+  .scale .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
+  .icons { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .icons li { background: var(--surface); display: grid; justify-items: center; gap: 0.6rem; padding: 1.4rem 0.5rem; color: var(--fg); }
+  .icons span { font-size: 0.68rem; color: var(--muted); }
+  .topos { list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+  .topos li { display: grid; gap: 0.5rem; padding: 1rem; background: var(--c-night); --topo-summit: var(--c-dawn); }
+  .topos span { font-size: 0.68rem; color: #A9B6BD; }
+  .mtokens { list-style: none; display: grid; gap: 0; }
+  .mtokens li { display: flex; justify-content: space-between; gap: 1rem; padding: 0.55rem 0; border-bottom: 1px solid var(--line); font-size: 0.78rem; }
+  .mtokens b { font-weight: 500; color: var(--accent); }
+  .motion-demo { position: relative; background: var(--c-night); display: flex; align-items: flex-end; justify-content: center; gap: 22px; padding: 2rem; min-height: 220px; }
+  .motion-demo i { width: 14px; height: 14px; background: var(--c-dawn); transform: rotate(45deg); animation: md 2.8s var(--ease-ascent) infinite; }
+  .motion-demo i:nth-child(2) { animation-delay: 0.15s; } .motion-demo i:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes md { 0%, 15% { transform: translateY(0) rotate(45deg); opacity: 0.3; } 55%, 85% { transform: translateY(-130px) rotate(45deg); opacity: 1; } 100% { transform: translateY(0) rotate(45deg); opacity: 0.3; } }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+  .cards img, .slides img, .social img, .og img { width: 100%; border: 1px solid var(--line); }
+  .sig { border: 1px solid var(--line); max-width: 560px; width: 100%; }
+  .slides { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+  .slides .doc { grid-row: span 2; }
+  .social { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); align-items: start; }
+  .social .wide { grid-column: span 3; }
+  .og { display: grid; grid-template-columns: auto 1fr 1fr; gap: var(--space-4); align-items: center; }
+  .favs { display: grid; gap: 1rem; justify-items: center; }
+  .favs img { border: 0; width: 64px; height: 64px; }
+  .favs img + img { width: 90px; height: 90px; }
+  .dl { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 0; border-top: 1px solid var(--line); }
+  .dl li { padding: 0.8rem 0; border-bottom: 1px solid var(--line); font-size: var(--text-sm); }
+  @media (max-width: 1000px) {
+    .blayout { grid-template-columns: 1fr; }
+    .toc { position: static; }
+    .toc ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pillars, .topos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .three { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .two, .cards, .slides { grid-template-columns: 1fr; }
+    .dd { grid-template-columns: 1fr; } .dd > :nth-child(odd) { border-right: 0; }
+    .social { grid-template-columns: repeat(2, minmax(0, 1fr)); } .social .wide { grid-column: span 2; }
+    .og { grid-template-columns: 1fr; }
+    .scale li { grid-template-columns: 2.5rem minmax(0, 1fr); } .scale .v { display: none; }
+  }
+</style>
+
+<script>
+  document.querySelector('[data-replay]')?.addEventListener('click', () => {
+    const svg = document.querySelector('.logo-hero svg');
+    if (!svg) return;
+    svg.classList.remove('logo--anim');
+    void (svg as unknown as HTMLElement).getBoundingClientRect();
+    svg.classList.add('logo--anim');
+  });
+</script>

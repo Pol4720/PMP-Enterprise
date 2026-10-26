@@ -21,7 +21,7 @@ export type TopoOptions = { size?: number; grid?: number; levels?: number; peaks
 
 /** Devuelve una lista de trazos (uno por nivel) en un viewBox size×size. */
 export function topoPaths(seed: string, opts: TopoOptions = {}) {
-  const { size = 200, grid = 64, levels = 11, peaks = 3 } = opts;
+  const { size = 200, grid = 46, levels = 11, peaks = 3 } = opts;
   const r = rng(hashString(seed));
   const ps = Array.from({ length: peaks }, (_, i) => ({
     x: i === 0 ? 0.42 + r() * 0.16 : 0.15 + r() * 0.7,
@@ -47,24 +47,56 @@ export function topoPaths(seed: string, opts: TopoOptions = {}) {
   }
   const out: { d: string; level: number }[] = [];
   const k = size / grid;
+  const key = (x: number, y: number) => `${Math.round(x * 100)},${Math.round(y * 100)}`;
   for (let l = 1; l <= levels; l++) {
     const L = (l / (levels + 1)) * 1.05;
-    let d = '';
+    const segs: [number, number, number, number][] = [];
     for (let j = 0; j < grid; j++) for (let i = 0; i < grid; i++) {
       const a = H[j][i], b = H[j][i + 1], c = H[j + 1][i + 1], e = H[j + 1][i];
       const pts: [number, number][] = [];
       const lp = (p: number, q: number, x0: number, y0: number, x1: number, y1: number): [number, number] => {
         const t = (L - p) / (q - p);
-        return [(x0 + (x1 - x0) * t) * k, (y0 + (y1 - y0) * t) * k];
+        return [x0 + (x1 - x0) * t, y0 + (y1 - y0) * t];
       };
       if ((a < L) !== (b < L)) pts.push(lp(a, b, i, j, i + 1, j));
       if ((b < L) !== (c < L)) pts.push(lp(b, c, i + 1, j, i + 1, j + 1));
       if ((c < L) !== (e < L)) pts.push(lp(c, e, i + 1, j + 1, i, j + 1));
       if ((e < L) !== (a < L)) pts.push(lp(e, a, i, j + 1, i, j));
-      for (let m = 0; m + 1 < pts.length; m += 2) {
-        d += `M${pts[m][0].toFixed(1)} ${pts[m][1].toFixed(1)}L${pts[m + 1][0].toFixed(1)} ${pts[m + 1][1].toFixed(1)}`;
-      }
+      for (let m = 0; m + 1 < pts.length; m += 2) segs.push([pts[m][0], pts[m][1], pts[m + 1][0], pts[m + 1][1]]);
     }
+    // Encadena segmentos que comparten extremos en polilíneas (SVG mucho más ligero)
+    const ends = new Map<string, number[]>();
+    segs.forEach((sg, idx) => {
+      for (const kk of [key(sg[0], sg[1]), key(sg[2], sg[3])]) { const arr = ends.get(kk); if (arr) arr.push(idx); else ends.set(kk, [idx]); }
+    });
+    const used = new Uint8Array(segs.length);
+    const fmt = (v: number) => (v * k).toFixed(1).replace(/\.0$/, '');
+    let d = '';
+    const extend = (line: [number, number][], atEnd: boolean) => {
+      for (;;) {
+        const [x, y] = atEnd ? line[line.length - 1] : line[0];
+        const next = (ends.get(key(x, y)) ?? []).find((n) => !used[n]);
+        if (next === undefined) return;
+        used[next] = 1;
+        const sg = segs[next];
+        const p: [number, number] = key(sg[0], sg[1]) === key(x, y) ? [sg[2], sg[3]] : [sg[0], sg[1]];
+        if (atEnd) line.push(p); else line.unshift(p);
+      }
+    };
+    segs.forEach((sg, idx) => {
+      if (used[idx]) return;
+      used[idx] = 1;
+      const line: [number, number][] = [[sg[0], sg[1]], [sg[2], sg[3]]];
+      extend(line, true); extend(line, false);
+      // Simplificación: descarta puntos casi alineados
+      const simp: [number, number][] = [line[0]];
+      for (let q = 1; q < line.length - 1; q++) {
+        const [ax, ay] = simp[simp.length - 1], [bx, by] = line[q], [cx, cy] = line[q + 1];
+        if (Math.abs((bx - ax) * (cy - ay) - (by - ay) * (cx - ax)) > 0.02) simp.push(line[q]);
+      }
+      simp.push(line[line.length - 1]);
+      d += 'M' + simp.map(([x, y]) => `${fmt(x)} ${fmt(y)}`).join(' ');
+    });
     if (d) out.push({ d, level: l });
   }
   // Cima: punto más alto

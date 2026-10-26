@@ -4,12 +4,13 @@
  * así que la escena funciona igual hacia delante y hacia atrás con el scroll.
  */
 import * as THREE from 'three';
-import { buildPeaks, makeHeight, gradientAscent, rng, APEX, type Peak } from './terrain';
+import { makeHeight, type Peak } from './terrain';
+import type { TerrainData } from './terrain.worker';
 import {
   particlesVert, particlesFrag, terrainVert, terrainFrag, pathVert, pathFrag,
   skyVert, skyFrag, beamVert, beamFrag,
 } from './shaders';
-import { PHASES } from './phases';
+import { PHASES, WORLD_SIZE } from './phases';
 
 export type StoryProduct = { name: string; accent: string; status: string; statusLabel: string };
 export type Label = { el: HTMLElement; pos: THREE.Vector3; from: number; to?: number };
@@ -21,9 +22,9 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 export { PHASES } from './phases';
 
-const WORLD = { x: 26, y: 6.4, z: 26 };
+const WORLD = WORLD_SIZE;
 
-type Quality = 'high' | 'medium' | 'low';
+import type { Quality } from './quality';
 
 export class StoryScene {
   renderer: THREE.WebGLRenderer;
@@ -68,36 +69,32 @@ export class StoryScene {
   private fpsSamples: number[] = [];
   private canvas: HTMLCanvasElement;
 
-  constructor(canvas: HTMLCanvasElement, products: StoryProduct[], soonLabel: string) {
+  constructor(canvas: HTMLCanvasElement, data: TerrainData, quality: Quality) {
     this.canvas = canvas;
-    const mobile = matchMedia('(max-width: 760px)').matches || matchMedia('(pointer: coarse)').matches;
-    const cores = navigator.hardwareConcurrency ?? 4;
-    this.quality = mobile ? (cores >= 6 ? 'medium' : 'low') : cores >= 6 ? 'high' : 'medium';
+    this.quality = quality;
     this.renderer = new THREE.WebGLRenderer({ canvas, antialias: this.quality === 'high', alpha: false, powerPreference: 'high-performance' });
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, this.quality === 'high' ? 2 : 1.5));
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.setClearColor('#08121A');
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 400);
 
-    this.peaks = buildPeaks(products, soonLabel);
+    this.peaks = data.peaks;
     this.h = makeHeight(this.peaks);
-    // La cima real: máximo local alrededor del centro
-    let best = { u: APEX.u, v: APEX.v, h: 0 };
-    for (let i = -20; i <= 20; i++) for (let j = -20; j <= 20; j++) {
-      const u = APEX.u + i * 0.003, v = APEX.v + j * 0.003, hv = this.h(u, v);
-      if (hv > best.h) best = { u, v, h: hv };
-    }
-    this.peaks[0].u = best.u; this.peaks[0].v = best.v;
-    this.summit = this.toWorld(best.u, best.v, best.h);
+    this.summit = this.toWorld(data.summit.u, data.summit.v, data.summit.h);
 
     this.buildSky();
-    this.buildParticles();
-    this.buildTerrain();
-    this.buildPath(best);
+    this.buildParticles(data);
+    this.buildTerrain(data);
+    this.buildPath(data);
     this.buildSummit();
-    this.buildBeacons(products);
+    this.buildBeacons();
     this.buildCamera();
     this.resize();
+  }
+
+  /** Compila los shaders sin bloquear (si el navegador lo permite). */
+  async warmUp() {
+    try { await this.renderer.compileAsync(this.scene, this.camera); } catch { /* se compilan en el primer render */ }
   }
 
   toWorld(u: number, v: number, hv = this.h(u, v)) {
@@ -120,38 +117,10 @@ export class StoryScene {
     this.scene.add(this.sky);
   }
 
-  private buildParticles() {
-    const side = this.quality === 'high' ? 330 : this.quality === 'medium' ? 230 : 170;
-    const N = side * side;
+  private buildParticles(d: TerrainData) {
+    const N = d.side * d.side;
     this.pointCount = N;
-    const grid = new Float32Array(N * 2);
-    const hs = new Float32Array(N);
-    const chaos = new Float32Array(N * 3);
-    const rand = new Float32Array(N);
-    const r = rng(7);
-    // 7 «fuentes» de datos heterogéneas: nubes, filamentos y anillos
-    const sources = Array.from({ length: 7 }, (_, i) => ({
-      c: new THREE.Vector3(2 + r() * 16, 1.5 + r() * 9, (r() - 0.5) * 14 - 2),
-      s: 0.8 + r() * 2.2,
-      type: i % 3,
-    }));
-    const gauss = () => { let u = 0, v = 0; while (!u) u = r(); while (!v) v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
-    for (let j = 0, k = 0; j < side; j++) for (let i = 0; i < side; i++, k++) {
-      const u = (i + 0.5) / side, v = (j + 0.5) / side;
-      grid[k * 2] = u; grid[k * 2 + 1] = v;
-      hs[k] = this.h(u, v);
-      rand[k] = r();
-      let p: THREE.Vector3;
-      if (r() < 0.28) {
-        p = new THREE.Vector3((r() - 0.5) * 40, r() * 16 - 2, (r() - 0.5) * 34);
-      } else {
-        const s = sources[Math.floor(r() * sources.length)];
-        if (s.type === 0) p = new THREE.Vector3(gauss(), gauss() * 0.7, gauss()).multiplyScalar(s.s).add(s.c);
-        else if (s.type === 1) { const t = (r() - 0.5) * 12; p = new THREE.Vector3(t, Math.sin(t * 0.8) * 1.2 + gauss() * 0.2, gauss() * 0.3).add(s.c); }
-        else { const a = r() * Math.PI * 2, rr = s.s * 1.6 + gauss() * 0.15; p = new THREE.Vector3(Math.cos(a) * rr, gauss() * 0.15, Math.sin(a) * rr).add(s.c); }
-      }
-      chaos.set([p.x, p.y, p.z], k * 3);
-    }
+    const { grid, hs, chaos, rand } = d;
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(N * 3), 3));
     g.setAttribute('aGrid', new THREE.BufferAttribute(grid, 2));
@@ -175,17 +144,10 @@ export class StoryScene {
     this.scene.add(this.particles);
   }
 
-  private buildTerrain() {
-    const seg = this.quality === 'high' ? 260 : this.quality === 'medium' ? 180 : 130;
-    const g = new THREE.PlaneGeometry(WORLD.x, WORLD.z, seg, seg);
+  private buildTerrain(d: TerrainData) {
+    const g = new THREE.PlaneGeometry(WORLD.x, WORLD.z, d.seg, d.seg);
     g.rotateX(-Math.PI / 2);
-    const pos = g.attributes.position as THREE.BufferAttribute;
-    const hs = new Float32Array(pos.count);
-    for (let i = 0; i < pos.count; i++) {
-      const u = pos.getX(i) / WORLD.x + 0.5, v = pos.getZ(i) / WORLD.z + 0.5;
-      hs[i] = this.h(u, v);
-    }
-    g.setAttribute('aH', new THREE.BufferAttribute(hs, 1));
+    g.setAttribute('aH', new THREE.BufferAttribute(d.meshH, 1));
     g.boundingSphere = new THREE.Sphere(new THREE.Vector3(0, 3, 0), 30);
     this.tMat = new THREE.ShaderMaterial({
       vertexShader: terrainVert, fragmentShader: terrainFrag, transparent: true,
@@ -211,14 +173,14 @@ export class StoryScene {
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
   }
 
-  private buildPath(best: { u: number; v: number }) {
-    const pts = gradientAscent(this.h, { u: 0.16, v: 0.95 });
-    const target = { u: best.u, v: best.v };
-    // Asegura que la ruta termina exactamente en la cima real
-    pts.push({ ...target, h: this.h(target.u, target.v) });
-    this.pathSteps = pts.length;
-    const sampled = pts.filter((_, i) => i % 6 === 0 || i === pts.length - 1)
-      .map((p) => this.toWorld(p.u, p.v, p.h).add(new THREE.Vector3(0, 0.12, 0)));
+  private buildPath(d: TerrainData) {
+    const n = d.path.length / 3;
+    this.pathSteps = n;
+    const sampled: THREE.Vector3[] = [];
+    for (let i = 0; i < n; i++) {
+      if (i % 6 !== 0 && i !== n - 1) continue;
+      sampled.push(this.toWorld(d.path[i * 3], d.path[i * 3 + 1], d.path[i * 3 + 2]).add(new THREE.Vector3(0, 0.12, 0)));
+    }
     this.pathCurve = new THREE.CatmullRomCurve3(sampled, false, 'centripetal');
     const geo = new THREE.TubeGeometry(this.pathCurve, 900, 0.028, 8, false);
     this.pathMat = new THREE.ShaderMaterial({
@@ -265,7 +227,7 @@ export class StoryScene {
     this.scene.add(this.diamond, this.diamondGlow, this.beam);
   }
 
-  private buildBeacons(products: StoryProduct[]) {
+  private buildBeacons() {
     const tex = this.glowTexture('rgba(255,255,255,1)', 'rgba(255,255,255,0)');
     this.peaks.slice(1).forEach((peak) => {
       const group = new THREE.Group();

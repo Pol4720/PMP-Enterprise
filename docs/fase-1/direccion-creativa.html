@@ -198,15 +198,13 @@ footer{padding-block:40px;border-top:1px solid var(--line)}
 <!-- 2. Arquitectura -->
 <section aria-labelledby="s2"><div class="wrap">
   <div class="sec-head"><p class="eyebrow">Arquitectura de marca</p><h2 id="s2">Marca madre que respalda, productos con nombre propio</h2>
-    <p class="lead">Modelo de <b>marca respaldada</b>. Cada producto conserva su nombre y su color de acento porque sirve a sectores muy distintos (logística, salud, auditoría). Todos comparten tipografía, retícula y la firma «por Ápice», que les presta confianza.</p></div>
+    <p class="lead">Modelo de <b>marca respaldada</b>. Cada producto conserva su nombre y su color de acento porque sirve a sectores muy distintos (logística, servicios y los que vengan). Todos comparten tipografía, retícula y la firma «por Ápice», que les presta confianza.</p></div>
   <div class="arch" role="img" aria-label="Diagrama: Ápice como marca madre, con dos ramas: productos y servicios.">
     <div class="mother">Ápice<i></i></div>
     <div class="rail"></div>
     <div class="kids">
       <div class="kid"><b>Ápice Servicios</b><span>Datos · estadística · IA a medida</span></div>
       <div class="kid"><b>Muévelo</b><span>por Ápice · logística</span></div>
-      <div class="kid"><b>AuditSoft</b><span>por Ápice · en colaboración</span></div>
-      <div class="kid"><b>Gestión de Ensayos Clínicos</b><span>por Ápice · en colaboración</span></div>
       <div class="kid"><b>Próximos productos</b><span>una entrada en la configuración</span></div>
     </div>
   </div>
@@ -391,7 +389,7 @@ footer{padding-block:40px;border-top:1px solid var(--line)}
     {t:'Estructura',b:'Limpiamos, integramos y ordenamos. Cada punto encuentra su lugar en una malla coherente.',d:'limpieza · validación · integración'},
     {t:'Modelo',b:'El modelo revela la forma del problema. Aparecen las curvas de nivel: patrones que antes no se veían.',d:'estadística · aprendizaje automático · validación cruzada'},
     {t:'Ascenso',b:'Con el modelo como mapa, cada decisión sube por la pendiente correcta, paso a paso, hacia el mejor resultado.',d:'optimización · ∇h · decisiones medibles'},
-    {t:'Cima',b:'En la cima, el resultado se convierte en producto. Desde arriba se ve la cordillera: cada producto es otra cumbre.',d:'Muévelo · AuditSoft · Ensayos clínicos · …'}
+    {t:'Cima',b:'En la cima, el resultado se convierte en producto. Desde arriba se ve la cordillera: cada producto es otra cumbre.',d:'Muévelo · próximas cumbres · …'}
   ];
   // terrain: main summit + three product peaks
   const peaks=[[0.60,0.36,1.0,0.17],[0.22,0.30,0.48,0.10],[0.30,0.72,0.42,0.10],[0.84,0.70,0.40,0.09]];
@@ -413,7 +411,7 @@ footer{padding-block:40px;border-top:1px solid var(--line)}
     if(e.length>=2)out.push([e[0],e[1]]);if(e.length===4)out.push([e[2],e[3]]);}return out;});
   // gradient ascent path
   const path=[[0.06,0.95]];{let[u,v]=path[0];for(let s=0;s<400;s++){const e=1e-3;const gu=(h(u+e,v)-h(u-e,v))/(2*e),gv=(h(u,v+e)-h(u,v-e))/(2*e);const n=Math.hypot(gu,gv);if(n<0.02)break;u+=0.008*gu/n;v+=0.008*gv/n;path.push([u,v]);if(Math.hypot(u-0.6,v-0.36)<0.01)break;}path.push([0.6,0.36]);}
-  const labels=[['Muévelo',0.22,0.30],['Ensayos clínicos',0.30,0.72],['AuditSoft',0.84,0.70]];
+  const labels=[['Muévelo',0.22,0.30],['Próxima cumbre',0.30,0.72],['Próxima cumbre',0.84,0.70]];
   let W=0,Hh=0,dpr=1;
   function size(){const r=cv.getBoundingClientRect();dpr=Math.min(2,window.devicePixelRatio||1);W=r.width;Hh=r.height;cv.width=W*dpr;cv.height=Hh*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw(+range.value);}
   const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();

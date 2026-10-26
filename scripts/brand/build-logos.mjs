@@ -46,7 +46,7 @@ function wordmark() {
   const glyphs = font.stringToGlyphs(text);
   let x = 0; const paths = []; const pos = [];
   const tracking = -0.5; // ajuste óptico
-  glyphs.forEach((g, i) => {
+  glyphs.forEach((g) => {
     const p = g.getPath(x, 0, FS);
     paths.push(p.toPathData(2));
     pos.push({ x, w: g.advanceWidth * FS / font.unitsPerEm });
@@ -57,7 +57,6 @@ function wordmark() {
   // Tilde = rombo dorado sobre el vértice de la «A»
   const bbA = glyphs[0].getPath(0, 0, FS).getBoundingBox();
   const acc = { cx: +((bbA.x1 + bbA.x2) / 2 + 3).toFixed(2), cy: +(bbA.y1 - 13).toFixed(2), r: 7.4 };
-  const bb = new opentype.Path(); paths; // noop
   const asc = cap + 24, desc = 0.24 * FS;
   return { d: paths.join(''), width: x, xh, acc, asc, desc };
 }

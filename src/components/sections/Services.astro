@@ -8,7 +8,7 @@ const { lang } = Astro.props;
 const dict = t(lang);
 const d = dict.services;
 ---
-<section id={dict.anchors.services} data-tone="dark" class="services section" aria-labelledby="services-title">
+<section id={dict.anchors.services} data-tone="dark" class="services section cv" aria-labelledby="services-title">
   <div class="container">
     <div class="section-head">
       <p class="eyebrow" data-reveal>{d.eyebrow}</p>
@@ -18,7 +18,7 @@ const d = dict.services;
     <ul class="cards">
       {services.map((s, i) => (
         <li class="card" data-reveal style={`--reveal-delay:${(i % 3) * 90}ms`}>
-          <Topo seed={s.id} levels={12} peaks={2} class="card-topo" summit={false} />
+          <Topo seed={s.id} levels={9} peaks={2} class="card-topo" summit={false} />
           <div class="card-top">
             <span class="ico"><Icon name={s.icon} size={28} /></span>
             <span class="idx mono">{String(i + 1).padStart(2, '0')}</span>
@@ -49,7 +49,7 @@ const d = dict.services;
   .card-top { display: flex; justify-content: space-between; align-items: center; }
   .ico { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid #26394A; color: var(--c-glacier-light); transition: border-color var(--dur-base), color var(--dur-base); }
   .card:hover .ico { border-color: var(--c-dawn); color: var(--c-dawn); }
-  .idx { font-size: var(--text-xs); color: #6f8591; }
+  .idx { font-size: var(--text-xs); color: #8fa2ac; }
   .card h3 { font-size: var(--text-xl); margin-top: var(--space-3); color: #fff; }
   .summary { color: #C9D3D6; font-size: var(--text-sm); }
   .uses { margin-top: var(--space-3); padding-top: var(--space-4); border-top: 1px solid #26394A; display: grid; gap: var(--space-3); }

@@ -1,0 +1,9 @@
+{
+  "_ayuda": "Datos para las piezas impresas y la firma. Cambia los valores y ejecuta: npm run brand:render",
+  "correo": "PENDIENTE-correo-de-contacto",
+  "tarjeta": {
+    "_ayuda": "Para una tarjeta personal, rellena nombre y cargo. Si nombre está vacío se genera la tarjeta corporativa.",
+    "nombre": "",
+    "cargo": ""
+  }
+}

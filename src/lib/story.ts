@@ -5,6 +5,9 @@
 import { PHASES, type PhaseId } from '../scene/phases';
 import { initSmoothScroll, gsap, ScrollTrigger } from './smooth';
 import type { StoryScene, StoryProduct } from '../scene/StoryScene';
+import type { TerrainData, TerrainRequest } from '../scene/terrain.worker';
+import { pickQuality } from '../scene/quality';
+import { WORLD_SIZE } from '../scene/phases';
 
 const clamp01 = (x: number) => Math.min(1, Math.max(0, x));
 const smooth = (a: number, b: number, x: number) => { const t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -17,8 +20,9 @@ function webglOk() {
 }
 
 export function initStory() {
-  const root = document.querySelector<HTMLElement>('[data-story]');
-  if (!root) return;
+  const found = document.querySelector<HTMLElement>('[data-story]');
+  if (!found) return;
+  const root: HTMLElement = found;
   const motion = document.documentElement.classList.contains('js-motion');
   initSmoothScroll();
   if (!motion || !webglOk()) return; // se queda la versión estática
@@ -133,12 +137,26 @@ export function initStory() {
     return el;
   };
 
-  const load = async () => {
-    const { StoryScene } = await import('../scene/StoryScene');
+  /** Calcula el terreno en un worker (con alternativa en el hilo principal). */
+  const terrain = (req: TerrainRequest) => new Promise<TerrainData>((resolveData, reject) => {
     try {
-      scene = new StoryScene(canvas, products, root.dataset.soon ?? '');
+      const w = new Worker(new URL('../scene/terrain.worker.ts', import.meta.url), { type: 'module' });
+      w.onmessage = (e) => { resolveData(e.data); w.terminate(); };
+      w.onerror = async () => { w.terminate(); const m = await import('../scene/terrain.worker'); resolveData(m.computeTerrain(req)); };
+      w.postMessage(req);
+    } catch (err) { reject(err); }
+  });
+
+  const load = async () => {
+    const q = pickQuality();
+    const req: TerrainRequest = { products, soonLabel: root.dataset.soon ?? '', side: q.side, seg: q.seg, world: WORLD_SIZE };
+    const [data, { StoryScene }] = await Promise.all([terrain(req), import('../scene/StoryScene')]);
+    try {
+      scene = new StoryScene(canvas, data, q.quality);
+      await scene.warmUp();
     } catch (err) {
       console.warn('[Ápice] WebGL no disponible, se usa la versión estática.', err);
+      scene = null;
       root.classList.remove('is-3d');
       ScrollTrigger.refresh();
       return;

@@ -10,3 +10,6 @@ export const PHASES = {
   outro: [0.91, 1],
 } as const;
 export type PhaseId = keyof typeof PHASES;
+
+/** Tamaño del mundo 3D (ancho, escala de altura, fondo). */
+export const WORLD_SIZE = { x: 26, y: 6.4, z: 26 };

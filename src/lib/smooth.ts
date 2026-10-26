@@ -11,6 +11,20 @@ export function motionAllowed() {
   return !matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+let refreshTimer = 0;
+/** Recalcula las posiciones de ScrollTrigger cuando cambia la altura de la página (fuentes, secciones diferidas). */
+function watchLayout() {
+  let last = document.body.scrollHeight;
+  new ResizeObserver(() => {
+    const h = document.body.scrollHeight;
+    if (Math.abs(h - last) < 2) return;
+    last = h;
+    clearTimeout(refreshTimer);
+    refreshTimer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+  }).observe(document.body);
+}
+watchLayout();
+
 export function initSmoothScroll() {
   if (lenis || !motionAllowed()) return lenis;
   const fine = matchMedia('(pointer: fine)').matches;

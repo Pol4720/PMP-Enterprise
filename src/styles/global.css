@@ -74,6 +74,9 @@ ul, ol { margin: 0; padding: 0; }
 .btn:hover .arrow { transform: translateX(4px); }
 .btn--ghost { --btn-bg: transparent; --btn-fg: var(--fg); border-color: currentColor; }
 
+/* Secciones: fuera de pantalla no se pintan hasta acercarse (menos trabajo inicial) */
+.cv { content-visibility: auto; contain-intrinsic-size: auto 1400px; }
+
 /* Secciones */
 .section { padding-block: clamp(5rem, 4rem + 6vw, 10rem); position: relative; }
 .section-head { display: grid; gap: var(--space-5); margin-bottom: clamp(3rem, 2rem + 4vw, 6rem); max-width: 60rem; }

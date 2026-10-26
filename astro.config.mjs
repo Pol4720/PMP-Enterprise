@@ -5,7 +5,7 @@ export default defineConfig({
   site: deploy.site,
   base: deploy.base,
   trailingSlash: 'always',
-  build: { format: 'directory', inlineStylesheets: 'auto' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
   i18n: {
     defaultLocale: 'es',
     locales: ['es', 'en'],

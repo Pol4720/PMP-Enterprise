@@ -36,13 +36,14 @@ const d = dict.approach;
   .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: var(--space-9); }
   .sticky { position: sticky; top: 7rem; display: grid; gap: var(--space-5); }
   .sticky h2 { font-size: var(--text-3xl); }
-  .counter { font-size: var(--text-2xl); color: #3e5566; margin-top: var(--space-5); }
+  .counter { font-size: var(--text-2xl); color: #7d929d; margin-top: var(--space-5); }
   .counter span { color: var(--c-dawn); }
   .steps { list-style: none; position: relative; display: grid; gap: clamp(3rem, 2rem + 4vw, 6rem); padding-left: 3rem; padding-block: 1rem 2rem; }
   .rail { position: absolute; left: 6px; top: 0; bottom: 0; width: 1px; background: #26394A; }
   .rail i { position: absolute; inset: 0 0 auto; height: 100%; background: linear-gradient(var(--c-glacier-light), var(--c-dawn)); transform-origin: top; transform: scaleY(var(--fill, 1)); }
   .step { position: relative; display: grid; gap: var(--space-3); opacity: 1; transition: opacity 0.6s var(--ease-out); }
-  :global(.js-motion) .step:not(.is-on) { opacity: 0.38; }
+  :global(.js-motion) .step:not(.is-on) h3 { color: #93a6b0; }
+  :global(.js-motion) .step:not(.is-on) .text { color: #9fb0b8; }
   .node { position: absolute; left: calc(-3rem + 1px); top: 0.45rem; width: 11px; height: 11px; border: 1px solid #3e5566; background: var(--c-night); transform: rotate(45deg); transition: background 0.5s, border-color 0.5s; }
   .step.is-on .node { background: var(--c-dawn); border-color: var(--c-dawn); box-shadow: 0 0 18px rgba(217,164,65,0.5); }
   .num { font-size: var(--text-xs); color: var(--c-dawn); letter-spacing: 0.14em; }
